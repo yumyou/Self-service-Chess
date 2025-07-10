@@ -1,0 +1,388 @@
+/* pages/roomList/roomList.wxss */
+page{
+  /* background: #fff; */
+}
+.tabs {
+  background-color: #fff;
+  display: flex;
+  justify-content:space-around;
+}
+.tabs .item .van-dropdown-menu{
+  box-shadow: unset !important;
+}
+.tabs .item .btn{
+  margin: 10rpx;
+  border-radius: 20rpx;
+  width: 200rpx;
+  text-align: center;
+  height: 80rpx;
+  line-height: 80rpx;
+  font-size: 36rpx;
+  color: #fff;
+  background-color: #3ea7fd;
+}
+.container{
+}
+.list{
+  padding-top: 20rpx;
+}
+.list .item{
+  border-radius: 20rpx;
+  margin: 0rpx 20rpx;
+  padding: 20rpx;
+  background-image: linear-gradient(181.2deg, rgb(204, 235, 250) 10.5%, rgba(169, 232, 243, 0.678) 86.8%);
+  height: 150rpx;
+  margin-bottom: 20rpx;
+  display: flex;
+  justify-content: space-between;
+}
+
+.list .item .left {
+    font-size: 28rpx;
+    color:#222e2b;
+}
+.list .item .left .name{
+  font-size: 32rpx;
+  font-weight: 600;
+  color:#222e2b;
+}
+.list .item .left .time{
+  font-size: 26rpx;
+  /* font-weight: 600; */
+  color:#222e2b;
+}
+.list .item .right .btn{
+  width: 180rpx;
+  position: relative;
+  top: 50rpx;
+  margin-bottom: 10rpx;
+  text-align: center;
+  height: 60rpx;
+  line-height: 60rpx;
+  font-size: 34rpx;
+  border-radius: 10rpx;
+  color: #fff;
+  background-color: #3ea7fd;
+}
+
+
+.container .buttom{
+  margin-top: 20rpx;
+  padding-bottom: 100rpx;
+  text-align: center;
+}
+
+.dialog{
+  padding: 30rpx;
+}
+.dialog .item{
+  display: flex;
+  justify-content: center;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  padding: 10rpx 10rpx;
+  margin: 15rpx;
+}
+.dialog .item .btn{
+  text-align: center;
+  border-radius: 10rpx;
+  color: #fff;
+  margin: 0rpx 30rpx;
+  width: 150rpx;
+  height: 50rpx;
+  line-height: 50rpx;
+  font-size: 30rpx;
+  flex-shrink: 0;
+}
+.dialog .item .btn.red{
+  background-color: #108ee9;
+}
+.dialog .item .btn.waring{
+  background-color: #06bd34;
+}
+.dialog .item .btn.yellow{
+  background-color: #bd3106;
+}
+.dialog .item text{
+  font-weight: 600;
+  font-size: 26rpx;
+}
+
+.dialog .item .name{
+  color: #108ee9;
+  font-weight: 600;
+  font-size: 36rpx;
+}
+
+
+
+
+.ac-control {
+  /* 这里可以添加整体容器的样式 */
+}
+
+.ac-control__open-button {
+  background-color: #108ee9;
+  color: white;
+  border: none;
+  border-radius: 8rpx;
+  padding: 16rpx 32rpx;
+  font-size: 32rpx;
+}
+
+.ac-control__modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.ac-control__modal--show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.ac-control__modal-content {
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 24rpx rgba(100, 101, 102, 0.12);
+  width: 90%;
+  max-width: 750rpx;
+}
+
+.ac-control__modal-header {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-bottom: 2rpx solid #f2f3f5;
+}
+
+.ac-control__modal-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  flex: 1;
+  text-align: center;
+}
+
+.ac-control__modal-close {
+  font-size: 80rpx;
+  color: #999;
+  padding: 0 16rpx;
+}
+
+.ac-control__modal-body {
+  padding: 40rpx;
+}
+
+.ac-control__temperature-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+  background-color: #f2f3f5;
+  border-radius: 16rpx;
+  padding: 10rpx;
+}
+
+.ac-control__temperature-display {
+  flex-grow: 1;
+  height: 100rpx;
+  margin: 10 20rpx;
+  background-color: #f2f3f5;
+  border-radius: 40rpx;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ac-control__temperature-fill {
+  position: absolute;
+  height: 100%;
+  background-color: #108ee9;
+  transition: width 0.3s ease;
+}
+
+.ac-control__temperature-text {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  line-height: 80rpx;
+  font-size: 36rpx;
+  font-weight: bold;
+  color:  #108ee9;
+}
+
+.ac-control__control-button {
+  width: 200rpx;
+  height: 100rpx;
+  text-align: center;
+  align-items: center;
+  line-height: 200rpx;
+  /* border-radius: 50%; */
+  background-color: #f2f3f5;
+  color: #108ee9;
+  font-size: 75rpx;
+  border: none;
+  display: flex;
+  justify-content: center;
+  padding: 30rpx;
+  margin: 0rpx;
+}
+
+.ac-control__mode-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20rpx;
+  margin-bottom: 40rpx;
+}
+
+.ac-control__mode-button {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f2f3f5;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  font-size: 24rpx;
+}
+
+.ac-control__mode-button--active {
+  background-color: #108ee9;
+  color: white;
+}
+
+.ac-control__mode-button--disabled {
+  opacity: 0.5;
+}
+
+.ac-control__mode-icon {
+  font-size: 48rpx;
+  margin-bottom: 10rpx;
+}
+
+.ac-control__swing-row {
+  display: flex;
+  justify-content:space-around;
+  margin-bottom: 30rpx;
+}
+
+.ac-control__swing-button {
+  width: calc(50% - 20rpx);
+  height: 100rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f2f3f5;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  margin: 10rpx;
+  font-size: 24rpx;
+}
+
+.ac-control__swing-button--active {
+  background-color: #108ee9;
+  color: white;
+}
+
+.ac-control__swing-button--disabled {
+  opacity: 0.5;
+}
+
+.ac-control__fan-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+  background-color: #f2f3f5;
+  border-radius: 16rpx;
+  padding: 10rpx;
+}
+
+.ac-control__fan-display {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.ac-control__fan-display .text {
+  width: 100%;
+  text-align: center;
+  line-height: 80rpx;
+  font-size: 36rpx;
+  font-weight: bold;
+  color:  #108ee9;
+}
+
+.ac-control__fan-icon {
+  width: 60rpx;
+  height: 60rpx;
+  margin-right: 10rpx;
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.ac-control__fan-icon--rotating {
+  animation: ac-control-rotate 2s linear infinite;
+}
+
+@keyframes ac-control-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.ac-control__fan-level {
+  display: flex;
+  justify-content: center;
+  margin-top: 10rpx;
+}
+
+.ac-control__fan-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background-color: #d8d8d8;
+  margin: 0 6rpx;
+}
+
+.ac-control__fan-dot--active {
+  background-color: #108ee9;
+}
+
+.ac-control__power-button {
+  width: 100%;
+  height: 88rpx;
+  border: none;
+  border-radius: 44rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  margin: 00rpx 10rpx 0rpx;
+}
+
+.ac-control__power-button--on {
+  background-color: #ee0a24;
+  color: white;
+}
+
+.ac-control__power-button--off {
+  background-color: #bbb9b9;
+  color: white;
+}
+.ac-control__modal-content .btn {
+  display: flex;
+  justify-content: center;
+  margin-top: 10rpx;
+}

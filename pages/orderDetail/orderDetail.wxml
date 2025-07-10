@@ -1,0 +1,367 @@
+<!-- pages/orderDetail/orderDetail.wxml -->
+<wxs src="../../utils/magic.wxs" module="magic" />
+<view class="container">
+  <view class="top-container">
+    <view class="top">
+      <view class="info">
+        <view>
+          <image class="roomImg" src="{{magic.split(OrderInfodata.roomImg)[0]}}"></image>
+        </view>
+        <view class="name">
+          {{OrderInfodata.roomName}}（{{OrderInfodata.roomType==1?'小包':OrderInfodata.roomType==2?'中包':OrderInfodata.roomType==3?'大包':OrderInfodata.roomType==4?'豪包':'商务包'}}）
+        </view>
+        <view class="share">
+          <button class="share bg-primary" open-type="share"><text>分享</text></button>
+        </view>
+      </view>
+      </view>
+      <!-- 时间段 -->
+      <view class="timeBox">
+        <view class="time">
+          <view class="hour">
+            {{magic.splittime(OrderInfodata.startTime)[0]}}:{{magic.splittime(OrderInfodata.startTime)[1]}}
+          </view>
+          <view class="date">{{magic.splitkongge(OrderInfodata.startTime)[0]}}</view>
+        </view>
+        <view class="total border-primary">{{OrderInfodata.orderHour}}小时</view>
+        <view class="time">
+          <view class="hour">
+            {{magic.splittime(OrderInfodata.endTime)[0]}}:{{magic.splittime(OrderInfodata.endTime)[1]}}
+          </view>
+          <view class="date">{{magic.splitkongge(OrderInfodata.endTime)[0]}}</view>
+        </view>
+      </view>
+      <!-- 订单详情 -->
+      <view class="orderInfo">
+       <view class="item">
+        <view class="title">订单编号：</view>
+        <view class="logo">
+          {{OrderInfodata.orderNo}}
+        </view>
+      </view>
+      <view class="item">
+        <view class="title">门店名称：</view>
+        <view class="logo">
+          {{OrderInfodata.storeName}}
+          <text class="color-primary link" bind:tap="goTencentMap">查看地图</text>
+        </view>
+      </view>
+      <view class="item">
+        <view class="title">支付方式：</view>
+        <text>{{OrderInfodata.payType===1?'微信':OrderInfodata.payType===2?'余额':OrderInfodata.payType===3?'团购':'套餐'}}</text>
+      </view>
+       <block wx:if="{{OrderInfodata.deposit}}">
+        <view class="item">
+           <view class="title">支付押金：</view>
+            <text>¥ {{OrderInfodata.deposit}} 元</text>
+        </view>
+       </block>
+      <view class="item">
+        <label class="title">使用卡券：</label>
+        <block wx:if="{{OrderInfodata.couponName.length>0}}">
+          <text>{{OrderInfodata.couponName}}</text>
+        </block>
+        <block wx:else>
+          <text>未选择</text>
+        </block>
+      </view>
+      <view class="item">
+        <label class="title">下单时间：</label>
+        <text>{{OrderInfodata.createTime}}</text>
+      </view>
+      <!-- wifi -->
+      <view class="item" wx:if="{{OrderInfodata.status==0||OrderInfodata.status==1}}">
+        <label class="title">WIFI信息：</label>
+        <view class="color-primary wifi">
+          {{OrderInfodata.wifiInfo}}
+        </view>
+      </view>
+      <view class="item" wx:if="{{OrderInfodata.status==0||OrderInfodata.status==1}}">
+        <label class="title">WIFI密码：</label>
+        <view class="color-primary wifi">
+          {{OrderInfodata.wifiPwd}}
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="order-container">
+    <view class="doors" wx:if="{{OrderInfodata.status === 0 || OrderInfodata.status === 1}}">
+      <view class="door m-b-20 color-primary" bind:tap="damenbindchange">
+        <view class="action">
+          <view class="iconfont icon-damen"></view>
+          <view class="text">门店大门</view>
+        </view>
+      </view>
+      <view class="door m-b-20 color-primary" bind:tap="roombindchange">
+        <view class="action">
+          <view class="iconfont icon-dian"></view>
+          <view class="text">通电开门</view>
+        </view>
+      </view>
+      <view class="door m-b-20 color-primary" bind:tap="showModal">
+        <view class="action">
+          <view class="iconfont icon-weizhi"></view>
+          <view class="text">空调控制</view>
+        </view>
+      </view>
+      <button hover-class="button-click" class="door color-primary share {{OrderInfodata.renewBtn ?'':'disabled'}}" open-type="{{OrderInfodata.renewBtn ?'share':''}}">
+        <view class="action">
+          <view class="iconfont icon-fenxiang"></view>
+          <view class="text">分享订单</view>
+        </view>
+      </button>
+      <view class="door color-primary {{OrderInfodata.renewBtn ?'color-primary':'disabled'}}" >
+        <view class="action" bind:tap="call">
+          <view class="iconfont icon-kefu "></view>
+          <view class="text">联系客服</view>
+        </view>
+      </view>
+      <view class="door color-primary {{OrderInfodata.renewBtn ?'color-primary':'disabled'}}" bind:tap="renewClick">
+        <view class="action">
+          <view class="iconfont icon-shalou"></view>
+          <view class="text">续费</view>
+        </view>
+      </view>
+      <view class="tip">Tips：分享房间给好友，好友可直接操作开门开电</view>
+    <view class="bar_btns" wx:if="{{OrderInfodata.status === 0}}">
+        <view class="btnSmall left" bindtap="cancelOrder" data-info="{{OrderInfodata.status}}">
+          取消订单
+        </view>
+        <view class="btnSmall right" bindtap="goChangeDoor">更换房间</view>
+    </view>
+     <view class="bar_btns" wx:if="{{OrderInfodata.status === 1}}">
+        <view class="btnSmall left" bindtap="stopOrder" data-id="{{OrderInfodata.orderId}}">
+          提前离店
+        </view>
+    </view>
+    </view>
+    <view class="doors" wx:else>
+      <view class="door {{OrderInfodata.renewBtn ?'color-primary':'disabled'}}" >
+        <view class="action" bind:tap="call">
+          <view class="iconfont icon-kefu "></view>
+          <view class="text">联系客服</view>
+        </view>
+      </view>
+      <view class="door {{OrderInfodata.renewBtn ?'color-primary':'disabled'}}" bind:tap="renewClick">
+        <view class="action">
+          <view class="iconfont icon-shalou"></view>
+          <view class="text">续费</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <!-- 温馨提示 -->
+  <view class="notes">
+    <view class="title border-primary">温馨提示</view>
+    <view class="line">1. 下单5分钟内可以取消订单或更换房间，超时将无法取消！</view>
+    <view class="line">2. 订单无法暂停，迟到消费，按原预订时间开始计费！</view>
+    <view class="line">3. 订单可以提前开始消费，提前开始提前结束。</view>
+    <view class="line">4. 特殊情况，或需要帮助，请联系客服处理！</view>
+    <view class="line">5. 离场时请带好随身物品，以防丢失！</view>
+    <view class="line">6.支付的押金,在订单结束5分钟后,自动原路退回！</view>
+  </view>
+</view>
+<!-- 续单弹窗 -->
+<van-dialog use-slot title="订单续费" show="{{ renewShow }}" show-cancel-button before-close="{{beforeCloseFunction}}">
+  <view class="dialog">
+    <view class="item" style="align-items: center;">
+      <label>请选择增加的时间：</label>
+      <van-stepper value="{{ addTime }}" step="1" min="0" max="8" disable-input bind:change="onChange" />
+      时
+    </view>
+    <view class="item">
+      <label>订单原结束时间：</label>
+      <text>{{OrderInfodata.endTime}}</text>
+    </view>
+    <view class="item">
+      <label>增加后结束时间：</label>
+      <text>{{newTime}}</text>
+    </view>
+    <view class="item">
+      <label>小时单价：</label>
+      <text class="color-attention">{{OrderInfodata.roomPrice}}元</text>
+      /小时
+    </view>
+    <block wx:if="{{OrderInfodata.roomPrice!=OrderInfodata.workPrice}}">
+      <view class="item">
+        <label>闲时单价：</label>
+        <text class="color-attention">{{OrderInfodata.workPrice}}元</text>
+        /小时
+      </view>
+    </block>
+    <view class="item">
+      <label>支付总价：</label>
+      <text class="color-attention">{{totalPay}}</text>
+      元
+    </view>
+    <view class="item">
+      <label>优惠卡券：</label>
+      <view class="coupon" bindtap="goCoupon">
+        <block wx:if="{{submit_couponInfo.couponName}}">
+          <block wx:if="{{submit_couponInfo.type == 1}}">
+            <view class="price-coupon">
+              {{submit_couponInfo.couponName}}(抵扣{{submit_couponInfo.price}}小时)
+            </view>
+          </block>
+          <block wx:if="{{submit_couponInfo.type == 2}}">
+            <view class="price-coupon">
+              {{submit_couponInfo.couponName}}(满减{{submit_couponInfo.price}}元)
+            </view>
+          </block>
+          <block wx:if="{{submit_couponInfo.type == 3}}">
+            <view class="price-coupon">
+              {{submit_couponInfo.couponName}}(延长{{submit_couponInfo.price}}小时)
+            </view>
+          </block>
+        </block>
+        <block wx:else>
+          <block wx:if="{{couponCount>0}}">
+            <view class="price-coupon">{{couponCount}}张</view>
+          </block>
+          <block wx:else>
+            <view class="price-coupon">暂无</view>
+          </block>
+        </block>
+        <view class="iconfont icon-right"></view>
+      </view>
+    </view>
+    <view class="item pay-item">
+      <label>支付方式：</label>
+      <radio-group class="pays" bindchange="radioChange">
+        <label class="pay" wx:for="{{payTypes}}" wx:key="value">
+          <view class="left">
+            <view wx:if="{{item.value === 1}}" class="iconfont icon-weixinzhifu color-primary"></view>
+            <view wx:if="{{item.value === 2}}" class="iconfont icon-pay color-primary"></view>
+            {{item.name}}
+          </view>
+          <view class="wallet-info" wx:if="{{item.value === 2}}">
+            <view class="info">账户余额: {{balance}}元</view>
+            <view class="info">赠送余额: {{giftBalance}}元</view>
+          </view>
+          <radio value="{{item.value}}" checked="{{item.checked}}" />
+        </label>
+      </radio-group>
+    </view>
+
+  </view>
+</van-dialog>
+<!-- 取消订单弹窗 -->
+<van-dialog use-slot title="取消订单" show="{{ cancelOrderShow }}" show-cancel-button cancel-button-text="暂不取消" confirm-button-text="确认取消" bind:confirm="cancelConfirm">
+  <view class="dialog">
+    <view class="item">
+      <label>当前位置：</label>
+      <text>{{OrderInfodata.storeName}} {{OrderInfodata.roomName}}（{{OrderInfodata.roomType==1?'小包':OrderInfodata.roomType==2?'中包':OrderInfodata.roomType==3?'大包':OrderInfodata.roomType==4?'豪包':'商务包'}}）</text>
+    </view>
+    <view class="item">
+      <label>预约时间：</label>
+      <text>{{OrderInfodata.createTime}}</text>
+    </view>
+    <view class="item">
+      <label>是否确认取消订单？</label>
+    </view>
+    <view class="item">
+      <p class="color-attention note">取消订单后，费用将会退还到您原支付方式账户中！</p>
+    </view>
+  </view>
+</van-dialog>
+<!-- 取消订单成功弹窗 -->
+<van-dialog use-slot title="订单取消成功" show="{{ cancelOrderSuccess }}" confirm-button-text="好的" bind:confirm="SucessConfirm">
+  <view class="dialog">
+    <view class="item">
+      <label>已为您成功取消下列订单</label>
+    </view>
+    <view class="item">
+      <label>当前位置：</label>
+      <block wx:if="{{OrderInfodata.roomType == 0}}">
+        <text>{{OrderInfodata.storeName}} {{OrderInfodata.roomName}} （特价包）</text>
+      </block>
+      <block wx:elif="{{OrderInfodata.roomType == 1}}">
+        <text>{{OrderInfodata.storeName}} {{OrderInfodata.roomName}} （小包）</text>
+      </block>
+      <block wx:elif="{{OrderInfodata.roomType == 2}}">
+        <text>{{OrderInfodata.storeName}} {{OrderInfodata.roomName}} （中包）</text>
+      </block>
+      <block wx:elif="{{OrderInfodata.roomType == 3}}">
+        <text>{{OrderInfodata.storeName}} {{OrderInfodata.roomName}} （大包）</text>
+      </block>
+      <block wx:elif="{{OrderInfodata.roomType == 4}}">
+        <text>{{OrderInfodata.storeName}} {{OrderInfodata.roomName}} （豪包）</text>
+      </block>
+      <block wx:else>
+        <text>{{OrderInfodata.storeName}} {{OrderInfodata.roomName}} （商务包）</text>
+      </block>
+    </view>
+    <view class="item">
+      <label>预约时间：</label>
+      <text>{{OrderInfodata.createTime}}</text>
+    </view>
+    <view class="item">
+      <view class="color-attention note">订单取消成功，费用已返还到原支付账户！</view>
+    </view>
+  </view>
+</van-dialog>
+
+<view class="ac-control">
+  <view class="ac-control__modal {{kongtiaoShow ? 'ac-control__modal--show' : ''}}" bindtap="hideModal">
+    <view class="ac-control__modal-content" catchtap="stopPropagation">
+      <view class="ac-control__modal-header">
+        <text class="ac-control__modal-title">空调控制</text>
+        <text class="ac-control__modal-close" bindtap="hideModal">×</text>
+      </view>
+      <view class="ac-control__modal-body">
+        <view class="ac-control__temperature-control">
+          <button class="ac-control__control-button" bindtap="adjustTemperature" data-delta="-1" >-</button>
+          <view class="ac-control__temperature-display">
+                <text class="ac-control__temperature-text">温度</text>            
+          </view>
+          <button class="ac-control__control-button" bindtap="adjustTemperature" data-delta="1" >+</button>
+        </view>
+        <view class="ac-control__fan-control">
+          <button class="ac-control__control-button" bindtap="adjustFanSpeed" data-delta="-1" >-</button>
+          <view class="ac-control__fan-display">
+            <text class="text">风量</text>
+            <view class="ac-control__fan-level">
+              <view wx:for="{{5}}" wx:key="index" class="ac-control__fan-dot {{fanSpeed >= index + 1 ? 'ac-control__fan-dot--active' : ''}}"></view>
+            </view>
+          </view>
+          <button class="ac-control__control-button" bindtap="adjustFanSpeed" data-delta="1" >+</button>
+        </view>
+        
+        
+        <view class="ac-control__mode-grid">
+          <view class="ac-control__mode-button {{mode === 'cool' ? 'ac-control__mode-button--active' : ''}} " bindtap="setMode" data-mode="cool">
+            <text class="ac-control__mode-icon">❄️</text>
+            <text>制冷</text>
+          </view>
+          <view class="ac-control__mode-button {{mode === 'heat' ? 'ac-control__mode-button--active' : ''}}" bindtap="setMode" data-mode="heat">
+            <text class="ac-control__mode-icon">🔆</text>
+            <text>制热</text>
+          </view>
+          <view class="ac-control__mode-button {{mode === 'auto' ? 'ac-control__mode-button--active' : ''}}" bindtap="setMode" data-mode="auto">
+            <text class="ac-control__mode-icon">🔄</text>
+            <text>自动</text>
+          </view>
+        </view>
+        
+        <view class="ac-control__swing-row">
+          <view class="ac-control__swing-button {{verticalSwing ? 'ac-control__swing-button--active' : ''}} " bindtap="toggleVerticalSwing">
+            <text class="ac-control__mode-icon">↕️</text>
+            <text>上下扫风</text>
+          </view>
+          <view class="ac-control__swing-button {{horizontalSwing ? 'ac-control__swing-button--active' : ''}} " bindtap="toggleHorizontalSwing">
+            <text class="ac-control__mode-icon">↔️</text>
+            <text>左右扫风</text>
+          </view>
+        </view>
+        <view class="btn">
+          <button class="ac-control__power-button ac-control__power-button--on" bindtap="togglePowerOn">
+          开机
+          </button>
+          <button class="ac-control__power-button ac-control__power-button--off" bindtap="togglePowerOff">
+          关机
+          </button>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
