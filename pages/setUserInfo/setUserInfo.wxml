@@ -1,27 +1,36 @@
 <!--pages/setUserInfo/setUserInfo.wxml-->
-<view class="container">
-  <view class="photo">
-    <view class="img"><image src="{{userinfo.avatar?userinfo.avatar:'/logo.png'}}" mode="widthFix" /></view>
-    <button hover-class="button-click"  class="tip" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">点击更新头像</button>
-  </view>
-  <view class="list">
-    <view class="item" bindtap="setUserName">
-      <view class="left">
-        <view class="label">昵称</view>
-        <text>{{userinfo.nickname}}</text>
+<!-- 顶部栏 -->
+
+
+<!-- 页面背景 -->
+<view class="userinfo-bg">
+  <!-- 信息卡片 -->
+  <view class="userinfo-card">
+    <view class="userinfo-row">
+      <view class="userinfo-label"> 头像</view>
+      <view class="userinfo-value">
+           <button hover-class="button-click"  class="tip" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+        <view class="userinfo-avatar">
+          <image src="{{userinfo.avatar?userinfo.avatar:'/logo.png'}}" mode="aspectFill" />
+        </view>
+        </button>
       </view>
-      <view class="iconfont icon-right"></view>
+      <text class="iconfont icon-right"></text>
     </view>
-    <view class="item">
-      <view class="left">
-        <view class="label">手机</view>
-        <text>{{userinfo.mobile}}</text>
-      </view>
-      <!-- <view class="btn" bindtap="setPhone">更换手机</view> -->
+    <view class="userinfo-row">
+      <view class="userinfo-label">昵称</view>
+      <view class="userinfo-value">{{userinfo.nickname}}</view>
+    </view>
+    <view class="userinfo-row" bindtap="onPhoneTap">
+      <view class="userinfo-label">手机号码</view>
+      <view class="userinfo-value">{{userinfo.mobile}}</view>
+      <text class="iconfont icon-right"></text>
     </view>
   </view>
-  <view class="bottom {{isIpx?'fix-iphonex-button':''}}">
-    <view class="btn theme-color-shadow theme-bg-primary" bindtap="exitLogin" style="color: #fff;">退出登录</view>
+
+  <!-- 退出登录按钮 -->
+  <view class="userinfo-logout-btn-wrapper">
+    <button class="userinfo-logout-btn" bindtap="exitLogin">退出登录</button>
   </view>
 </view>
 

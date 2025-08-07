@@ -1,0 +1,66 @@
+<!--pages/signIn/signIn.wxml-->
+<view class="container">
+  <!-- 头部区域 -->
+  <view class="header">
+
+    
+    <!-- 签到信息 -->
+    <view class="signin-info">
+      <view class="signin-stats">
+        <view class="consecutive-days">
+          <text>连续签到{{signInInfo.consecutiveDays}}天</text>
+        </view>
+        <view class="total-points">
+          <text>积分: {{signInInfo.totalPoints}}</text>
+        </view>
+      </view>
+      
+      <!-- 签到按钮 -->
+      <view class="signin-btn-container">
+        <button 
+          class="signin-btn {{signInInfo.todaySigned ? 'signed' : ''}}"
+          bindtap="doSignIn"
+          disabled="{{signInInfo.todaySigned || loading}}"
+        >
+          <text wx:if="{{signInInfo.todaySigned}}">今日已签到</text>
+          <text wx:elif="{{loading}}">签到中...</text>
+          <text wx:else>立即签到</text>
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 内容区域 -->
+  <view class="content">
+    <view class="section-header">
+      <text class="section-title">积分明细</text>
+      <view class="rules-link" bindtap="viewPointsRules">
+        <text>积分规则</text>
+      </view>
+    </view>
+    
+    <!-- 积分明细列表 -->
+    <view class="points-list">
+      <block wx:for="{{pointsList}}" wx:key="id">
+        <view class="points-item">
+          <view class="points-info">
+            <view class="points-title">{{item.title}}</view>
+            <view class="points-date">{{item.date}}</view>
+          </view>
+          <view class="points-amount">
+            <text class="points-value">+{{item.points}}</text>
+            <view class="points-icon">
+              <text class="coin-icon">★</text>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+    
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{pointsList.length === 0}}">
+      <view class="empty-icon">📊</view>
+      <text class="empty-text">暂无积分记录</text>
+    </view>
+  </view>
+</view> 

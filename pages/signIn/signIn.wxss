@@ -1,0 +1,261 @@
+/* pages/signIn/signIn.wxss */
+
+/* 容器样式 */
+.container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+/* 头部区域 */
+.header {
+  background: linear-gradient(135deg, #ff9f43 0%, #ff6b35 100%);
+  padding: 20px 16px 40px;
+  color: #ffffff;
+  position: relative;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.back-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+}
+
+.back-icon {
+  font-size: 20px;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.header-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333333;
+  flex: 1;
+  text-align: center;
+}
+
+.header-placeholder {
+  width: 32px;
+}
+
+/* 签到信息 */
+.signin-info {
+  text-align: center;
+}
+
+.signin-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 0 20px;
+}
+
+.consecutive-days,
+.total-points {
+  font-size: 16px;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.signin-btn-container {
+  margin-top: 20px;
+}
+
+.signin-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 25px;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 40px;
+  transition: all 0.3s ease;
+}
+
+.signin-btn:active {
+  transform: scale(0.95);
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.signin-btn.signed {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.signin-btn[disabled] {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* 内容区域 */
+.content {
+  background-color: #f5f5f5;
+  padding: 20px 16px;
+  margin-top: -20px;
+  border-radius: 20px 20px 0 0;
+  min-height: calc(100vh - 200px);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding: 0 4px;
+  margin-top: 20rpx;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333333;
+}
+
+.rules-link {
+  font-size: 14px;
+  color: #ff6b35;
+  padding: 8px 12px;
+  background: rgba(255, 107, 53, 0.1);
+  border-radius: 15px;
+}
+
+/* 积分明细列表 */
+.points-list {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.points-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.points-item:last-child {
+  border-bottom: none;
+}
+
+.points-info {
+  flex: 1;
+}
+
+.points-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333333;
+  margin-bottom: 4px;
+}
+
+.points-date {
+  font-size: 12px;
+  color: #999999;
+}
+
+.points-amount {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.points-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ff6b35;
+}
+
+.points-icon {
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #ffd700 0%, #ffb347 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.coin-icon {
+  font-size: 12px;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: #ffffff;
+  border-radius: 12px;
+  margin-top: 20px;
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.empty-text {
+  font-size: 14px;
+  color: #999999;
+}
+
+/* 响应式适配 */
+@media (max-width: 375px) {
+  .header {
+    padding: 16px 12px 30px;
+  }
+  
+  .signin-stats {
+    padding: 0 10px;
+  }
+  
+  .content {
+    padding: 16px 12px;
+  }
+}
+
+/* 暗色模式适配 */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background-color: #1a1a1a;
+  }
+  
+  .content {
+    background-color: #1a1a1a;
+  }
+  
+  .points-list {
+    background-color: #2d2d2d;
+  }
+  
+  .points-item {
+    border-bottom-color: #404040;
+  }
+  
+  .section-title {
+    color: #ffffff;
+  }
+  
+  .points-title {
+    color: #ffffff;
+  }
+  
+  .empty-state {
+    background-color: #2d2d2d;
+  }
+} 

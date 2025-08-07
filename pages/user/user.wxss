@@ -1,146 +1,663 @@
 /* pages/user/user.wxss */
-.top{
-  padding: 30rpx 30rpx 60rpx 30rpx;
-}
-
-.top .userInfo{
+.container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: transparent;
-  padding: 0;
-  text-align: left;
-  color: #fff;
-  line-height: 1;
-  border-radius: 0;
-}
-.top .userInfo .left{
-  display: flex;
-  margin-left: 20rpx;
-  align-items: center;
-}
-.top .userInfo .photo{
-  width: 100rpx;
-  height: 100rpx;
-  border: 1rpx solid #fff;
-  border-radius: 100%;
+  flex-direction: column;
+  height: 100vh;
   overflow: hidden;
 }
-.top .userInfo .photo image{
+
+/* 头部标题 */
+.header {
+  background-color: #fff;
+  text-align: center;
+  padding: 40rpx 0 20rpx;
+  position: relative;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+/* 用户信息区域 */
+.user-section {
+  padding: 40rpx 0 20rpx;
+  text-align: center;
+}
+
+.user-info {
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  padding-left:60rpx;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 30rpx;
+  margin-bottom: 20rpx;
+  background-color: #f0f0f0;
+}
+
+.avatar image {
   width: 100%;
   height: 100%;
 }
-.top .userInfo .info{
-  margin-left: 40rpx;
-  font-size: 30rpx;
+
+.user-name {
+  font-size: 38rpx;
+  color: #333;
+  font-weight: 600;
 }
-.top .userInfo .name{
-  margin-bottom: 10rpx;
+
+/* 账户余额卡片 */
+.balance-card {
+  background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+  margin: 0 30rpx;
+  border-radius: 20rpx;
+  padding: 35rpx 30rpx;
+  border-radius: 38rpx;
+  color: #fff;
 }
-.icon-right{
+.blue-jb {
+		position: relative;
+		/* 为伪元素定位提供参考 */
+		padding-top:5rpx ;
+		border: none;
+	}
+
+	/* 左侧三角形 */
+	.blue-jb::before {
+		content: "";
+		position: absolute;
+		bottom: -1px;
+		left: 0;
+		width: 50%;
+		/* 三角形宽度 */
+		height: 40rpx;
+		/* 三角形高度 */
+		background:rgb(255, 255, 255);
+		margin: 0 -30rpx;
+		clip-path: polygon(0% 100%, 0% 0%, 100% 100%);
+		/* 左下直角 */
+		/* z-index: 9999; */
+	}
+
+	/* 右侧三角形 */
+	.blue-jb::after {
+		content: "";
+		position: absolute;
+		bottom: -1px;
+		right: 0;
+		width: 50%;
+		margin: 0 -30rpx;
+
+		/* 三角形宽度 */
+		height: 40rpx;
+		background:rgb(255, 255, 255);
+		clip-path: polygon(100% 100%, 0% 100%, 100% 0%);
+		/* 右下直角 */
+		/* z-index: 0; */
+	}
+  	.balance-card::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 8px;
+	}
+.balance-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom:10rpx;
+}
+
+.balance-icon {
   font-size: 40rpx;
+  margin-right: 15rpx;
 }
-.account{
+
+.balance-title {
+  font-size: 35rpx;
+  flex: 1;
+}
+
+.recharge-btn {
+  background-color: #f6ad55;
+  color: #fff;
+  padding: 10rpx 18rpx;
+  border-radius: 25rpx;
+  font-size: 24rpx;
+  text-decoration: none;
+}
+
+.balance-amount {
+  margin-bottom: 20rpx;
+}
+
+.amount {
+  font-size: 36rpx;
+
+  margin:0 5rpx;
+}
+
+.currency {
+  font-size: 24rpx;
+  opacity: 0.8;
+}
+
+.balance-footer {
   display: flex;
   justify-content: center;
-  padding: 20rpx 0 10rpx;
 }
-.account .item{
-  width: 240rpx;
-  text-align: center;
-  font-size: 28rpx;
-  position: relative;
+
+.balance-item {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+
+  text-decoration: none;
+  color: #fff;
 }
-.account .item .num{
-  font-size: 36rpx;
-  margin-bottom: 10rpx;
+
+.coin-icon,
+.ticket-icon {
+  font-size: 32rpx;
+  margin-right: 15rpx;
 }
-/* .account .item::after{
-  content: "";
-  display: block;
-  width: 4rpx;
-  height: 40rpx;
-  background: #fff;
-  position: absolute;
-  right: 0;
-  top: 50%;
-  margin-top: -20rpx;
+
+.balance-info {
+  display: flex;
+  flex-direction: column;
+  padding:16rpx;
 }
-.account .item:last-child::after{
-  display: none;
-} */
-.list-container {
-  padding: 0 14rpx;
-  position: relative;
-  top: -40rpx;
+
+.balance-label {
+  font-size: 32rpx;
+  opacity: 0.8;
+  letter-spacing: 2px;
+  margin-bottom: 5rpx;
 }
-.list{
-  padding: 0 30rpx;
+
+.balance-value {
+  font-size: 26rpx;
+  color:#ccc;
+
+}
+.flex-body{
+  flex: 1;
   background-color: #fff;
-  border-radius: 16rpx;
+  overflow: auto;
 }
-.list .item{
+/* 常用功能 */
+.function-section {
+  box-shadow: 0 2px 10px rgba(177, 174, 174, 0.50);
+  
+  background-color: #fff;
+  margin: 30rpx;
+  border-radius: 20rpx;
+  padding: 40rpx 30rpx;
+}
+
+.section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1rpx solid #ddd;
-  height: 100rpx;
-  font-size: 30rpx;
-  padding: 0;
-  border-radius: 0;
+  margin-bottom: 30rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.more-link {
+  display: flex;
+  align-items: center;
+  color: #BBB;
+  font-size: 26rpx;
+  text-decoration: none;
+}
+
+.arrow {
+  margin-left: 10rpx;
+  font-size: 24rpx;
+}
+
+.function-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20rpx 10rpx;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 10rpx;
+}
+
+.function-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10rpx;
+  border-radius: 15rpx;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.function-item:hover {
+  background-color: #f8f9fa;
+}
+
+.function-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  margin-bottom: 15rpx;
+  background-color: #f0f2f5;
+}
+
+.wifi-icon {
+  background-color: #f5f5f5;
+}
+
+.store-icon {
+  background-color: #f5f5f5;
+
+}
+
+.checkin-icon {
+  background-color: #f5f5f5;
+
+}
+
+.contact-icon {
+  background-color: #f5f5f5;
+
+}
+
+.voucher-icon {
+  background-color: #f5f5f5;
+
+}
+
+.favorite-icon {
+  background-color: #f5f5f5;
+
+}
+
+.function-text {
+  font-size: 24rpx;
+  color: #666;
+  text-align: center;
+}
+
+/* 管理功能 */
+.admin-section {
+  background-color: #fff;
+  margin: 0 30rpx 30rpx;
+  border-radius: 20rpx;
+  padding: 40rpx 30rpx;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40rpx;
+}
+
+.admin-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30rpx 20rpx;
+  border-radius: 15rpx;
+  background-color: #f8f9fa;
+  text-decoration: none;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+.admin-item:hover {
+  background-color: #e9ecef;
+  transform: translateY(-2rpx);
+}
+
+.admin-icon {
+  font-size: 48rpx;
+  margin-bottom: 20rpx;
+}
+
+.admin-text {
+  font-size: 26rpx;
+  color: #666;
+  text-align: center;
+}
+
+/* 按钮点击效果 */
+.button-click {
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+
+.headerTitle {
+  color: #000000;
+  font-size: 32rpx;
+  width: 100%;
+  text-align: center  ;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+/* 弹窗样式 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 15, 15, 0.747);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  border-radius: 20rpx ;
+  width: 100%;
+  max-width: 600rpx;
+  padding: 40rpx 30rpx;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+  text-align: center;
+  margin-bottom: 40rpx;
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.modal-body {
+  display: flex;
+  justify-content: center;
+}
+
+.kf-button {
+  background-color: #07c160;
+  color: #fff;
+  border: none;
+  border-radius: 50rpx;
+  padding: 20rpx 60rpx;
   font-size: 28rpx;
-  background: transparent;
+  font-weight: 500;
+  width: 100%;
+  max-width: 400rpx;
 }
-.list .item:last-child{
-  border: 0;
+
+.kf-button:active {
+  background-color: #06ad56;
+  transform: scale(0.98);
 }
-.list .item .left{
+
+/* WiFi弹窗样式 */
+.wifi-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.wifi-modal-content {
+  background-color: #fff;
+  border-radius: 20rpx;
+  width: 90%;
+  max-width: 600rpx;
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.15);
+}
+
+.wifi-modal-header {
+  text-align: center;
+  padding: 40rpx 30rpx 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.wifi-modal-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+/* 扫描状态样式 */
+.wifi-scanning {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx 30rpx;
+}
+
+.scanning-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 4rpx solid #f3f3f3;
+  border-top: 4rpx solid #07c160;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 30rpx;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.scanning-text {
+  font-size: 28rpx;
+  color: #666;
+}
+
+/* WiFi列表样式 */
+.wifi-list {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.wifi-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  transition: background-color 0.2s ease;
+}
+
+.wifi-item:active {
+  background-color: #f8f9fa;
+}
+
+.wifi-info {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.wifi-name {
+  font-size: 32rpx;
+  color: #333;
+  margin-right: 20rpx;
+}
+
+.wifi-signal {
   display: flex;
   align-items: center;
 }
-.list .item .icon{
-  font-size: 50rpx;
-  margin-right: 20rpx;
-}
-.list .item .icon-right{
-  color: #999;
-}
-.menu{
-  border-top: 20rpx solid #f5f5f5;
-  padding: 30rpx 14rpx 30rpx 14rpx;
-  margin-top: -50rpx;
-}
-.menu .title{
-  border-width: 0;
-  border-left-width: 6rpx;
-  border-style: solid;
-  padding-left: 10rpx;
-  font-size: 32rpx;
-  color: #000;
-  line-height: 1;
-}
-.menu .box{
-  margin-top: 30rpx;
-  padding-top: 40rpx;
+
+.signal-bars {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  background-color: #fff;
-  border-radius: 20rpx;
-}
-.menu .box .item{
-  text-align: center;
-  width: 25%;
-  margin-bottom: 40rpx;
-  font-size: 24rpx;
-}
-.menu .box .item .iconfont{
-  font-size: 48rpx;
-  margin-bottom: 10rpx;
+  align-items: flex-end;
+  gap: 2rpx;
 }
 
-.version {
+.signal-bar {
+  width: 6rpx;
+  background-color: #07c160;
+  border-radius: 1rpx;
+}
+
+.signal-bar:nth-child(1) { height: 8rpx; }
+.signal-bar:nth-child(2) { height: 12rpx; }
+.signal-bar:nth-child(3) { height: 16rpx; }
+.signal-bar:nth-child(4) { height: 20rpx; }
+
+.wifi-status {
+  margin-left: 20rpx;
+}
+
+.connected-text {
   font-size: 24rpx;
+  color: #07c160;
+  background-color: #f0f9ff;
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+/* 更多网络选项 */
+.more-networks {
   text-align: center;
-  color: #108ee9;
+  padding: 30rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.more-networks-text {
+  font-size: 28rpx;
+  color: #07c160;
+}
+
+/* 密码输入弹窗样式 */
+.password-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.password-modal-content {
+  background-color: #fff;
+  border-radius: 20rpx;
+  width: 90%;
+  max-width: 500rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.15);
+}
+
+.password-modal-header {
+  text-align: center;
+  padding: 40rpx 30rpx 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.password-modal-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.password-modal-body {
+  padding: 40rpx 30rpx;
+}
+
+.wifi-name-display {
+  text-align: center;
+  margin-bottom: 30rpx;
+}
+
+.wifi-name-text {
+  font-size: 28rpx;
+  color: #666;
+  background-color: #f8f9fa;
+  padding: 20rpx;
+  border-radius: 10rpx;
+  display: inline-block;
+}
+
+.password-input {
+  width: 100%;
+  height: 80rpx;
+  border: 2rpx solid #e0e0e0;
+  border-radius: 10rpx;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+  margin-bottom: 40rpx;
+  box-sizing: border-box;
+}
+
+.password-input:focus {
+  border-color: #07c160;
+}
+
+.password-actions {
+  display: flex;
+  gap: 20rpx;
+}
+
+.cancel-btn, .connect-btn {
+  flex: 1;
+  height: 80rpx;
+  border-radius: 10rpx;
+  font-size: 28rpx;
+  border: none;
+}
+
+.cancel-btn {
+  background-color: #f8f9fa;
+  color: #666;
+}
+
+.connect-btn {
+  background-color: #07c160;
+  color: #fff;
+}
+
+.cancel-btn:active {
+  background-color: #e9ecef;
+}
+
+.connect-btn:active {
+  background-color: #06ad56;
 }

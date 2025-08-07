@@ -1,0 +1,79 @@
+<!--pages/storage/storage.wxml-->
+<view class="container">
+  <!-- 头部标题 -->
+
+
+  <!-- 选择模式 -->
+  <view class="select-mode" wx:if="{{currentMode === 'select'}}">
+    <view class="mode-subtitle">请选择</view>
+    
+    <view class="mode-cards">
+      <!-- 存杆卡片 -->
+      <view class="mode-card deposit-card" bindtap="selectDeposit">
+        <view class="mode-icon deposit-icon">
+          <text class="icon-text">📦</text>
+        </view>
+        <view class="mode-text">存</view>
+      </view>
+      
+      <!-- 取杆卡片 -->
+      <view class="mode-card retrieve-card" bindtap="selectRetrieve">
+        <view class="mode-icon retrieve-icon">
+          <text class="icon-text">📄</text>
+        </view>
+        <view class="mode-text">取</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作模式 -->
+  <view class="operation-mode" wx:if="{{currentMode === 'deposit' || currentMode === 'retrieve'}}">
+    <!-- 中央图标 -->
+    <view class="central-icon {{currentMode === 'deposit' ? 'deposit-icon-large' : 'retrieve-icon-large'}}">
+      <text class="icon-text-large">{{currentMode === 'deposit' ? '📦' : '📄'}}</text>
+    </view>
+    
+    <!-- 操作说明 -->
+    <view class="operation-instruction">
+      <text class="instruction-text">{{operationStatus.message}}</text>
+    </view>
+    
+    <!-- 柜门信息 -->
+    <view class="cabinet-info">
+      <text class="cabinet-number">柜门编号: {{cabinetInfo.doorNumber}}</text>
+    </view>
+    
+    <!-- 操作按钮 -->
+    <view class="operation-buttons" wx:if="{{cabinetInfo.status === 'open'}}">
+      <button 
+        class="confirm-btn"
+        bindtap="confirmOperation"
+        disabled="{{operationStatus.loading}}"
+      >
+        <text wx:if="{{operationStatus.loading}}">处理中...</text>
+        <text wx:else>确认完成</text>
+      </button>
+      
+      <button 
+        class="cancel-btn"
+        bindtap="cancelOperation"
+        disabled="{{operationStatus.loading}}"
+      >
+        <text>取消操作</text>
+      </button>
+    </view>
+    
+    <!-- 加载状态 -->
+    <view class="loading-state" wx:if="{{operationStatus.loading}}">
+      <view class="loading-spinner"></view>
+      <text class="loading-text">{{operationStatus.message}}</text>
+    </view>
+  </view>
+
+  <!-- 底部操作 -->
+  <view class="bottom-actions" wx:if="{{currentMode === 'select'}}">
+    <button class="records-btn" bindtap="viewRecords">
+      <text>查看记录</text>
+    </button>
+  </view>
+</view> 
