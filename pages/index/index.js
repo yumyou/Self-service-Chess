@@ -29,7 +29,7 @@ Page({
     simpleModel: '',//简洁模式
     maoHeight:0,//锚链接跳转高度
     tabIndex: 0,
-
+businessHours: '00:00-24:00', // 营业时间
   },
 
   /**
@@ -72,6 +72,11 @@ Page({
    */
   onShow() {
     console.log("onShow index");
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({
+        selected: 0
+      })
+    }
     var that = this;
     that.setData({
       isLogin: app.globalData.isLogin,
@@ -498,7 +503,51 @@ Page({
     });
     that.setroomlistHour(index);
   },
-    
+  // 拨打电话
+  makePhoneCall() {
+    let that = this;
+    var phoneLength = that.data.doorinfodata.kefuPhone.length;
+    if(phoneLength > 0){
+      if(phoneLength == 11){
+        wx.makePhoneCall({
+          phoneNumber: that.data.doorinfodata.kefuPhone,
+          success: function () {
+            console.log("拨打电话成功！")
+          },
+          fail: function () {
+            console.log("拨打电话失败！")
+          }
+        })
+      } else {
+        wx.showModal({
+          title: '提示',
+          content: '客服上班时间10：00~23：00\r\n如您遇到问题，建议先查看"使用帮助"！\r\n本店客服微信号：'+that.data.doorinfodata.kefuPhone,
+          confirmText: '复制',
+          complete: (res) => {
+            if (res.confirm) {
+              wx.setClipboardData({
+                data: that.data.doorinfodata.kefuPhone,
+                success: function (res) {
+                  wx.showToast({ title: '微信号已复制到剪贴板！' })
+                }
+              })
+            }
+          }
+        })
+      }
+    }
+  },
+  // 切换门店
+  switchStore() {
+    wx.navigateTo({
+      url: '../doorList/doorList',
+    })
+  },
+  goGetBalance(){
+    wx.navigateTo({
+      url: '../getBalance/getBalance',
+    })
+  },    
   //充值
   goRecharge(){
     var that = this;
@@ -510,6 +559,13 @@ Page({
     }else{
       that.gotologin();
     }
+  },
+  //俱乐部报名
+  goClubRegister(){
+    var that = this;
+    wx.navigateTo({
+      url: '/pages/clubRegister/clubRegister',
+    })
   },
   //团购
    gototuangou(){
@@ -687,4 +743,178 @@ Page({
         }
       )
     },
+
+
+
+
+    //新增
+    // 修改goOrder方法以支持新的UI交互
+goOrder(e){
+  var that = this;
+  let status = e.currentTarget.dataset.status;
+  if(status == 0){
+    wx.showToast({
+      title: '该房间暂不可用',
+      icon: 'none'
+    });
+    return
+  }
+  
+  let aroomid = e.currentTarget.dataset.info;
+  var atime = '';
+  if(that.data.timeselectindex >= 0)
+    atime = that.data.timeDayArr[that.data.timeselectindex];
+  var storeId = that.data.storeId
+  
+  if(status == 2){
+    if(that.data.doorinfodata.clearOpen){
+      wx.showModal({
+        title: '温馨提示',
+        content: '您选择的此场地暂未清洁，介意请勿预订！',
+        confirmText: '继续预订',
+        cancelText: '取消',
+        complete: (res) => {
+          if (res.confirm) {
+            that.navigateToOrder(aroomid, atime, storeId);
+          }
+        }
+      })
+    }else{
+      wx.showModal({
+        title: '温馨提示',
+        content: '房间暂未清洁，禁止预订！',
+        showCancel: false
+      })
+    }
+  }else{
+    that.navigateToOrder(aroomid, atime, storeId);
+  }
+},
+
+// 新增导航到订单页面的方法
+navigateToOrder(roomId, daytime, storeId) {
+  wx.navigateTo({
+    url: '../orderSubmit/orderSubmit?roomId='+roomId+'&daytime='+daytime+'&storeId='+storeId+'&timeselectindex='+this.data.timeselectindex,
+  })
+},
+
+// 修改getDoorListdata方法以添加距离计算
+getDoorListdata: function(e){
+  var that = this;
+  if (that.data.storeId) {
+    http.request(
+      "/member/index/getRoomInfoList",
+      "1",
+      "post", {
+        "storeId": that.data.storeId,
+        "roomClass": that.data.tabIndex,
+      },
+      app.globalData.userDatatoken.accessToken,
+      "获取中...",
+      function success(info) {
+        if (info.code == 0) {
+          // 为每个房间添加距离信息（模拟数据，实际应该从后端获取）
+          let roomsWithDistance = info.data.map((room, index) => {
+            return {
+              ...room,
+              distance: (Math.random() * 5 + 0.1).toFixed(1) // 随机生成0.1-5.1km的距离
+            }
+          });
+          
+          that.setData({
+            doorlistArr: roomsWithDistance
+          });
+          that.setroomlistHour(0);
+        }else{
+          wx.showModal({
+            content: '请求服务异常，请稍后重试',
+            showCancel: false,
+          })
+        }
+      },
+      function fail(info) {
+        wx.showToast({
+          title: '网络请求失败',
+          icon: 'none'
+        });
+      }
+    )
+  } 
+},
+
+// 新增快速预订方法
+quickReserve(e) {
+  var that = this;
+  let roomId = e.currentTarget.dataset.roomid;
+  let status = e.currentTarget.dataset.status;
+  
+  if(status == 0){
+    wx.showToast({
+      title: '该房间暂不可用',
+      icon: 'none'
+    });
+    return;
+  }
+  
+  // 检查登录状态
+  if(!that.data.isLogin){
+    that.gotologin();
+    return;
+  }
+  
+  // 直接跳转到预订页面
+  wx.navigateTo({
+    url: '../orderSubmit/orderSubmit?roomId='+roomId+'&storeId='+that.data.storeId+'&timeselectindex='+that.data.timeselectindex,
+  })
+},
+
+// 新增获取用户位置并计算距离的方法
+getUserLocationAndCalculateDistance() {
+  var that = this;
+  wx.getLocation({
+    type: 'gcj02',
+    success: function(res) {
+      // 计算与各个房间的距离
+      // 这里需要根据实际的房间位置数据来计算
+      that.calculateDistanceToRooms(res.latitude, res.longitude);
+    },
+    fail: function() {
+      // 如果获取位置失败，使用默认距离
+      console.log('获取位置失败，使用默认距离');
+    }
+  })
+},
+
+// 计算距离的辅助方法
+calculateDistanceToRooms(userLat, userLng) {
+  var that = this;
+  let updatedRooms = that.data.doorlistArr.map(room => {
+    // 这里应该使用实际的房间坐标
+    // 现在使用门店的坐标作为示例
+    if(that.data.doorinfodata.lat && that.data.doorinfodata.lon) {
+      let distance = that.getDistance(userLat, userLng, that.data.doorinfodata.lat, that.data.doorinfodata.lon);
+      return {
+        ...room,
+        distance: distance.toFixed(1)
+      }
+    }
+    return room;
+  });
+  
+  that.setData({
+    doorlistArr: updatedRooms
+  });
+},
+
+// 计算两点间距离的方法（使用球面距离公式）
+getDistance(lat1, lng1, lat2, lng2) {
+  const R = 6371; // 地球半径（公里）
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLng/2) * Math.sin(dLng/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c;
+}
 })

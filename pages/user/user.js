@@ -164,6 +164,41 @@ Page({
       //console.log('未登录失败！')
     }
   },
+  call:function () {
+    let that = this;
+    var phoneLength=that.data.doorinfodata.kefuPhone.length;
+    if(phoneLength>0){
+      if(phoneLength==11){
+          wx.makePhoneCall({
+            phoneNumber:that.data.doorinfodata.kefuPhone,
+            success:function () {
+              //console.log("拨打电话成功！")
+            },
+            fail:function () {
+              //console.log("拨打电话失败！")
+            }
+          })
+      }else{
+        wx.showModal({
+          title: '提示',
+          content: '客服上班时间10：00~23：00\r\n如您遇到问题，建议先查看“使用帮助”！\r\n本店客服微信号：'+that.data.doorinfodata.kefuPhone,
+          confirmText: '复制',
+          complete: (res) => {
+            if (res.confirm) {
+              wx.setClipboardData({
+                data: that.data.doorinfodata.kefuPhone,
+                success: function (res) {
+                    wx.showToast({ title: '微信号已复制到剪贴板！' })
+                }
+              })
+            } else if (res.cancel) {
+              //console.log('用户点击取消')
+            }
+          }
+        })
+      }
+    }
+  },
   getSysInfo:function(){
     var that = this;
     http.request(

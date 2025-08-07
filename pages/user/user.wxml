@@ -93,7 +93,7 @@
           </view>
           <text class="function-text">每日签到</text>
         </view>
-        <view class="function-item" bindtap="{{isLogin?'showKf':'gotologin'}}">
+        <view class="function-item" bindtap="{{isLogin?'call':'gotologin'}}">
           <view class="function-icon contact-icon">
             <image src="/img/lx.png" mode="widthFix" style="width: 30px;"></image>
           </view>
@@ -187,18 +187,5 @@
         </view>
       </view>
     </block>
-  </view>
-</view>
-<!-- 客服联系弹窗 -->
-<view class="modal-overlay" wx:if="{{show}}" bindtap="hideKf">
-  <view class="modal-content" catchtap="stopPropagation">
-    <view class="modal-header">
-      <text class="modal-title">显示客服的联系方式</text>
-    </view>
-    <view class="modal-body">
-      <button class="kf-button" open-type="contact" bindcontact="handleContact" session-from="sessionFrom">
-        联系客服
-      </button>
-    </view>
   </view>
 </view>
