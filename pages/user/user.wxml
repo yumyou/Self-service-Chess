@@ -99,14 +99,12 @@
           </view>
           <text class="function-text">联系我们</text>
         </view>
-        <navigator class="function-item" url="../tuangou/tuangou">
+
+        <view class="function-item" bindtap="{{isLogin?'goTuangou':'gotologin'}}">
           <view class="function-icon voucher-icon">
             <image src="/img/yq.png" mode="widthFix" style="width: 30px;"></image>
           </view>
           <text class="function-text">验券</text>
-        </navigator>
-        <view class="" bindtap="{{isLogin?'goTuangou':'gotologin'}}">
-
         </view>
         <view class="function-item" bindtap="{{isLogin?'goOrder':'gotologin'}}">
           <view class="function-icon favorite-icon">
