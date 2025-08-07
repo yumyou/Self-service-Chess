@@ -6,23 +6,36 @@ var util1 = require('../../utils/util.js');
 
 Page({
   data: {
+    showArea: false,
+    areaValue: '',
     appName: app.globalData.appName,
     statusBarHeight: '',
     titleBarHeight: '',
-    isMap: false,
     bannershowlist:[],//banner数组
     MainStorelist:[],//列表数组
     cityName: '选择城市',
     name: '', //搜索关键词
     lat: '', 
     lon: '', 
-    markers: [],
-    store: '', //地图上方展示的门店详情
     storeId:'',
     isLogin:app.globalData.isLogin,
     pageindex:1,//分页的page
     canLoadMore: true,//是否还能加载更多
     userId: '', //管理员代下单用户id
+    areaList : {
+      province_list: {
+        110000: '北京市',
+        120000: '天津市',
+      },
+      city_list: {
+        110100: '北京市',
+        120100: '天津市',
+      },
+      county_list: {
+        110101: '东城区',
+        110102: '西城区',
+      },
+    }
   },
 
   /**
@@ -40,8 +53,6 @@ Page({
         pageNo: 1,
         canLoadMore:true,
         MainStorelist: [],
-        markers: [],
-        store: '',
     })
     that.getMainListdata('refresh');
     wx.stopPullDownRefresh();
@@ -134,21 +145,7 @@ Page({
 
   },
 
-  //点击地图
-  goMapSeach(){
-    this.setData({
-      isMap: true
-    })
-    this.setData({name:''})
-    this.getMainListdata('refresh')
-  },
-  goListSeach(){
-    this.setData({
-      isMap: false
-    })
-    this.setData({name:''})
-    this.getMainListdata('refresh')
-  },
+
   //充值
   goRecharge(e){
     var that = this;
@@ -223,24 +220,6 @@ Page({
             }else{
               //有数据
               let list = info.data.list
-              let allMarkers = [];
-              for(let i=0;i<list.length;i++){
-                var title = list[i].storeName
-                var lat = list[i].lat
-                var lon = list[i].lon
-                var storeId = list[i].storeId
-                let marker = {
-                  id: storeId,
-                  latitude: lat,
-                  longitude: lon,
-                  callout: {
-                    // 点击marker展示title
-                    content: title
-                  },
-                  fontSize: 20,
-                }
-                allMarkers.push(marker);
-              }
               //如果只有一个店 那么直接进入门店主页
               if(list.length===1&&that.data.cityName=='选择城市'&&that.data.name==''){
                 // 缓存门店ID
@@ -253,20 +232,14 @@ Page({
                   //列表已有数据  那么就追加
                   let arr = that.data.MainStorelist;
                   let arrs = arr.concat(info.data.list);
-                  let markers = that.data.markers;
-                  let newMarkers = markers.concat(allMarkers);
                   that.setData({
                     MainStorelist: arrs,
-                    markers: newMarkers,
-                    store: list[0],
                     pageNo: that.data.pageNo + 1,
                     canLoadMore: arrs.length < info.data.total
                   })
                 }else{
                   that.setData({
                     MainStorelist: info.data.list,
-                    markers: allMarkers,
-                    store: list[0],
                     pageNo: that.data.pageNo + 1,
                   });
                 }
@@ -515,4 +488,20 @@ Page({
         }
       )
     },
+  openAreaPicker() {
+    this.setData({ showArea: true });
+  },
+  onAreaClose() {
+    this.setData({ showArea: false });
+  },
+  onAreaConfirm(e) {
+    const { values } = e.detail;
+    const cityName = values.map(item => item.name).join('');
+    this.setData({
+      cityName,
+      showArea: false,
+      areaValue: values[2]?.code || values[1]?.code || values[0]?.code
+    });
+    this.getMainListdata('refresh');
+  },
 })

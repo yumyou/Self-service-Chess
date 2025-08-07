@@ -1,58 +1,31 @@
 <!--index.wxml-->
-<view class="top">
-  <view class="banner">
-      <swiper autoplay indicator-dots>
-        <block wx:for="{{bannershowlist}}" wx:key="banner">
-          <swiper-item>
-            <image src="{{item.imgUrl}}" mode="widthFix"></image>
-          </swiper-item>
-        </block>
-      </swiper>
+
+<!-- 头部搜索区域 -->
+<view class="search-header">
+  <view class="search-container">
+    <view class="city-selector" bindtap="openAreaPicker">
+      <text class="city-text">{{cityName}}</text>
+      <van-icon name="arrow-down" class="chevron-down" />
     </view>
+    <view class="search-input-wrapper">
+      <van-icon name="search" class="search-icon" />
+      <input class="search-input" type="text" placeholder="搜索门店" value="{{name}}" bindinput="onInputChange"/>
+    </view>
+  </view>
 </view>
-<view class="top-search">
-    <view class="left">
-      <view class="label" bindtap="goLocation"><text>{{cityName}}</text>
-        <icon></icon>
-      </view>
-      <input class="input" type="text" placeholder="{{isMap?'搜索位置查找附近门店':'搜索门店'}}" value="{{name}}"  bindinput="onInputChange"/>
-    </view>
-    <view wx:if="{{isMap}}" class="right" bindtap="goListSeach">
-      <view class="iconfont icon-list"></view><text>列表</text>
-    </view>
-    <view wx:else class="right" bindtap="goMapSeach">
-      <!-- <button hover-class="button-click"  class="iconfont icon-map" bindgetphonenumber="phone" open-type="getPhoneNumber">地图</button> -->
-      <view class="iconfont icon-map"></view><text>地图</text>
-    </view>
-  </view>
+
+<!-- 城市选择弹窗 -->
+<van-popup show="{{showArea}}" position="bottom" custom-style="height: auto; border-radius: 16rpx 16rpx 0 0;" bind:close="onAreaClose">
+  <van-area
+    area-list="{{areaList}}"
+    value="{{areaValue}}"
+    bind:confirm="onAreaConfirm"
+    bind:cancel="onAreaClose"
+  />
+</van-popup>
 <view class="container">
-   <!-- 地图 -->
-   <view class="mapPage" wx:if="{{isMap}}">
-      <!-- 点击marker展示门店 -->
-    <view class="list" wx:if="{{store}}">
-      <view class="item" bind:tap="goStore" data-storeid="{{store.storeId}}">
-        <view wx:if="{{item.headImg}}">
-            <image class="img" src="{{item.headImg}}" mode="scaleToFill"></image>
-          </view>
-          <view wx:else>
-            <image class="img" src="/logo.png" mode="aspectFit"></image>
-          </view>
-          <view class="info">
-            <view class="name">{{store.storeName}}</view>
-            <view class="tag-primary"><text class="distance">{{store.distance}}</text>km</view>
-              <view class="iconfont icon-weizhi btn" catchtap="goTencentMap" data-info="{{store}}"></view>
-              <view class="iconfont icon-phone btn" catchtap="call" data-info="{{store.kefuPhone}}"></view>
-          </view>
-          <view class="address">
-              {{store.address}}
-            </view>
-      </view>
-    </view>
-    <map class="map" id="map" longitude="{{lon}}" latitude="{{lat}}" scale="10" show-location="true"
-      markers="{{markers}}" bindmarkertap="makertap"></map>
-  </view>
   <!-- 列表 -->
-  <view class="lists" wx:else="">
+  <view class="lists">
     <view class="list">
     <block wx:if="{{MainStorelist.length>0}}">
       <view class="item" bind:tap="goStore" data-storeid="{{item.storeId}}" wx:for="{{MainStorelist}}" wx:key="MainStorelist">
@@ -98,6 +71,5 @@
     </view>
   </navigator>
 </view>
-<!-- 底部按钮 -->
-<view wx:if="{{isMap}}" class="bg-primary enterBtn" bindtap="goListSeach">预定房间</view>
+
 <view class="bt"></view>

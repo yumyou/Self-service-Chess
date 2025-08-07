@@ -1,5 +1,5 @@
 {
-  "navigationStyle": "custom",
-  "navigationBarTextStyle": "white",
-  "usingComponents": {}
+  "navigationBarTextStyle": "black",
+  "navigationBarTitleText": "切换门店",
+    "usingComponents": {}
 }
