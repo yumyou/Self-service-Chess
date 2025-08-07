@@ -1,0 +1,29 @@
+<!-- pages/favorite/favorite.wxml -->
+<view class="container">
+
+
+  <!-- 门店列表 -->
+  <view class="store-list" wx:if="{{favoriteStores.length > 0}}">
+    <view class="store-item" wx:for="{{favoriteStores}}" wx:key="storeId">
+      <view class="store-image">
+        <image src="{{item.headImg || '/logo.png'}}" mode="aspectFill"></image>
+      </view>
+      <view class="store-info">
+        <view class="store-name">{{item.storeName}}</view>
+        <view class="store-hours">营业时间:{{item.businessHours || '00:00-24:00'}}</view>
+        <view class="store-address">{{item.address}}</view>
+        <view class="book-btn" bindtap="goToOrder" data-store="{{item}}">
+          <van-icon name="phone-o" size="16px" />
+          <text>立即预订</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:else>
+    <image src="/img/empty.png" mode="aspectFit" class="empty-image"></image>
+    <text class="empty-text">暂无收藏门店</text>
+    <navigator url="../index/index" class="go-store-btn">去发现门店</navigator>
+  </view>
+</view>

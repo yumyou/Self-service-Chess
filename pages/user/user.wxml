@@ -93,20 +93,25 @@
           </view>
           <text class="function-text">每日签到</text>
         </view>
-        <view class="function-item" bindtap="{{isLogin?'call':'gotologin'}}">
+        <button class="function-item function-button" open-type="contact" bindcontact="handleContact" session-from="sessionFrom">
           <view class="function-icon contact-icon">
             <image src="/img/lx.png" mode="widthFix" style="width: 30px;"></image>
           </view>
           <text class="function-text">联系我们</text>
-        </view>
-
+        </button>
+        <!-- <view class="function-item" bindtap="{{isLogin?'call':'gotologin'}}">
+          <view class="function-icon contact-icon">
+            <image src="/img/lx.png" mode="widthFix" style="width: 30px;"></image>
+          </view>
+          <text class="function-text">联系我们</text>
+        </view> -->
         <view class="function-item" bindtap="{{isLogin?'goTuangou':'gotologin'}}">
           <view class="function-icon voucher-icon">
             <image src="/img/yq.png" mode="widthFix" style="width: 30px;"></image>
           </view>
           <text class="function-text">验券</text>
         </view>
-        <view class="function-item" bindtap="{{isLogin?'goOrder':'gotologin'}}">
+        <view class="function-item" bindtap="{{isLogin?'goFavorite':'gotologin'}}">
           <view class="function-icon favorite-icon">
             <image src="/img/sc.png" mode="widthFix" style="width: 30px;"></image>
           </view>

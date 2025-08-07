@@ -164,6 +164,21 @@ Page({
       //console.log('未登录失败！')
     }
   },
+  goTuangou:function(){
+    wx.navigateTo({
+      url: '../tuangou/tuangou',
+    })
+  },
+  goStorage:function(){
+    wx.navigateTo({
+      url: '../storage/storage',
+    })
+  },
+  goSignIn:function(){
+    wx.navigateTo({
+      url: '../signIn/signIn',
+    })
+  },
   call:function () {
     let that = this;
     var phoneLength=that.data.doorinfodata.kefuPhone.length;
@@ -230,6 +245,18 @@ Page({
     wx.switchTab({
       url: '../orderList/orderList',
     })
+  },
+  // 跳转到收藏门店页面
+  goFavorite: function() {
+    if (!app.globalData.isLogin) {
+      wx.navigateTo({
+        url: '../login/login',
+      });
+      return;
+    }
+    wx.navigateTo({
+      url: '../favorite/favorite',
+    });
   },
   //到登录界面
   gotologin(){

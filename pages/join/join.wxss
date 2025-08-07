@@ -26,7 +26,7 @@ page{
   margin-top: 50rpx;
 }
 .btns .btn{
-  width: 320rpx;
+  width: 100%;
   height: 90rpx;
   line-height: 90rpx;
   box-sizing: border-box;
@@ -48,4 +48,56 @@ page{
 }
 .success .info{
   text-align: left;
+}
+
+/* 自定义图片上传样式 */
+.upload-section {
+  padding: 30rpx 20rpx;
+  background: #fff;
+}
+
+.upload-title {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #323233;
+  margin-bottom: 8rpx;
+}
+
+.upload-subtitle {
+  font-size: 24rpx;
+  color: #969799;
+  margin-bottom: 20rpx;
+}
+
+/* 图片上传样式优化 */
+.van-uploader {
+  padding: 20rpx 0;
+}
+
+.van-uploader__upload {
+  background-color: #f7f8fa;
+  border: 2rpx dashed #dcdee0;
+  border-radius: 8rpx;
+}
+
+.van-uploader__upload-text {
+  color: #969799;
+  font-size: 24rpx;
+}
+
+.van-uploader__preview-image {
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+
+.van-uploader__preview-delete {
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  width: 40rpx;
+  height: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  font-weight: bold;
 }

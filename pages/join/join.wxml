@@ -1,21 +1,38 @@
 <!--pages/join/join.wxml-->
 <view class="container">
   <view class="form" wx:if="{{!success}}">
+        <van-cell-group>
+      <van-field  required label="真实姓名" model:value="{{ name }}" placeholder="请填写您的姓名" maxlength="5"/>
+    </van-cell-group>
     <van-cell-group>
-      <van-cell title="所属城市" is-link>
+      <van-cell title="所属城市" required is-link>
         <picker mode="region" level="city" bindchange="bindRegionChange" value="{{region}}">
           <view class="{{region?'picker':''}}">{{region?region:'请选择意向开店城市'}}</view>
         </picker>
       </van-cell>
     </van-cell-group>
     <van-cell-group>
-      <van-field label="您的姓名" model:value="{{ name }}" placeholder="请填写您的姓名" maxlength="5"/>
+      <van-field  required label="俱乐部" model:value="{{ message }}" placeholder="请输入您所在的"/>
     </van-cell-group>
     <van-cell-group>
-      <van-field label="您的电话" model:value="{{ phone }}" placeholder="请填写您的电话" maxlength="11"/>
+      <van-field  required label="联系方式" model:value="{{ phone }}" placeholder="请填写您的电话" maxlength="11"/>
     </van-cell-group>
+
+    <!-- 图片上传功能 -->
     <van-cell-group>
-      <van-field label="留言建议" model:value="{{ message }}" placeholder="选填"/>
+      <view class="upload-section">
+
+        <view class="upload-title">        <text style="color:red">*</text>上传俱乐部相关凭证</view>
+        <view class="upload-subtitle">选填，最多3张</view>
+        <van-uploader 
+          file-list="{{ fileList }}" 
+          bind:after-read="afterRead"
+          bind:delete="deleteImage"
+          max-count="3"
+          upload-text="添加图片"
+          image-fit="aspectFill"
+        />
+      </view>
     </van-cell-group>
     <view class="note">一个电话解决您的开店疑惑：{{tele}}</view>
   </view>
@@ -28,7 +45,6 @@
     </view>
   </view>
   <view class="btns">
-    <button hover-class="button-click"  class="btn tel border-primary color-primary" bindtap="call">电话咨询</button>
-    <button hover-class="button-click"  wx:if="{{!success}}" class="btn submit bg-primary" bindtap="submit">提交申请</button>
+    <button hover-class="button-click"  wx:if="{{!success}}"  class="btn submit bg-primary1" bindtap="submit">提交申请</button>
   </view>
 </view>

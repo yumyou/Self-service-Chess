@@ -564,7 +564,7 @@ businessHours: '00:00-24:00', // 营业时间
   goClubRegister(){
     var that = this;
     wx.navigateTo({
-      url: '/pages/clubRegister/clubRegister',
+      url: '/pages/join/join',
     })
   },
   //团购

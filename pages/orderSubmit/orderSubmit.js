@@ -10,6 +10,7 @@ Page({
   data: {
     appName: app.globalData.appName,
     isLogin: app.globalData.isLogin,
+    bookingType: 'hour', // 新增：预订类型，默认为小时开台
     storeId: '',
     roomId:'',//房间id
     daytime:'',//传递的日期
@@ -63,6 +64,7 @@ Page({
     giftBalance: '',
     balance: '',
     isIpx: app.globalData.isIpx?true:false,
+    discountAmount: 0, // 新增：优惠金额
     formatter(type, value) {
       if (type === 'year') {
         return `${value}年`;
@@ -117,6 +119,14 @@ Page({
       }
     }
     that.getroomInfodata(roomId).then(res=>{
+      // 初始化完成后设置默认值
+      that.setData({
+        bookingType: 'hour', // 默认选择小时开台
+        select_time_index: 0, // 默认选择2小时
+        order_hour: 2
+      });
+      console.log('初始化完成，开始计算时间');
+      that.MathDate(new Date(that.data.submit_begin_time));
     });
     that.setData({
       storeId: storeId,
@@ -286,9 +296,22 @@ Page({
     console.log("MathPrice");
     var that = this;
     if(that.data.nightLong){
+      // 确保通宵价格是有效数字
+      var txPrice = parseFloat(that.data.txPrice) || 0;
+      console.log('通宵价格:', txPrice);
+      
+      // 如果通宵价格为0，尝试使用小时价格计算
+      if(txPrice <= 0){
+        var orderHour = parseInt(that.data.order_hour) || 8;
+        var hourPrice = parseFloat(that.data.price) || 0;
+        txPrice = orderHour * hourPrice;
+        console.log('使用小时价格计算通宵价格:', txPrice);
+      }
+      
       that.setData({
-          pricestring: that.data.txPrice,
-          showprice: that.data.txPrice
+          pricestring: txPrice.toFixed(2),
+          showprice: txPrice.toFixed(2),
+          discountAmount: 0
       })
     }else{
       var startDate=new Date(that.data.submit_begin_time);
@@ -300,12 +323,15 @@ Page({
         })
       }
       var priceResult=0;
+      var originalPrice = 0;
       if(that.data.select_pkg_index>-1){
         priceResult=that.data.pkgList[that.data.select_pkg_index].price;
+        originalPrice = priceResult;
       }else{
         var price=that.getPrice(startDate);
         console.log("订单时长:"+hour);
-        priceResult=(hour*price).toFixed(2);
+        originalPrice = (hour*price).toFixed(2);
+        priceResult = originalPrice;
         if(that.data.couponInfo){
           const acoupon=that.data.couponInfo;
           if(acoupon.type == 1){
@@ -322,10 +348,13 @@ Page({
       }
       if(that.data.roominfodata.deposit){
         priceResult=(parseFloat(priceResult)+parseFloat(that.data.roominfodata.deposit)).toFixed(2);
+        originalPrice = (parseFloat(originalPrice)+parseFloat(that.data.roominfodata.deposit)).toFixed(2);
       }
+      var discountAmount = (parseFloat(originalPrice) - parseFloat(priceResult)).toFixed(2);
       that.setData({
         pricestring: priceResult,
-        showprice: priceResult
+        showprice: originalPrice,
+        discountAmount: discountAmount
       })
     }
   },
@@ -556,22 +585,40 @@ Page({
             // minHour=minHour+1;
             other_hour_options.push(minHour+i+'小时');
           }
+          
+          // 生成时间轴数据
+          var timeHourAllArr = [];
+          for(let i = 0; i < 24; i++) {
+            timeHourAllArr.push({
+              hour: i,
+              disable: false,
+              lowPrice: i >= 0 && i <= 6, // 凌晨0-6点为低价时段
+              highPrice: i >= 18 && i <= 23 // 晚上18-23点为高价时段
+            });
+          }
+          
+          // 打印通宵相关数据，用于调试
+          console.log('房间信息:', info.data);
+          console.log('通宵开始时间:', info.data.txStartHour);
+          console.log('通宵时长:', info.data.txHour);
+          console.log('通宵价格:', info.data.tongxiaoPrice);
+          
           that.setData({
             roominfodata: info.data,
-            price: info.data.price,
-            minHour: info.data.minHour,
-            leadHour: info.data.leadHour,
-            leadDay: info.data.leadDay,
-            txStartHour: info.data.txStartHour,
-            txHour: info.data.txHour,
-            txPrice: info.data.tongxiaoPrice,
-            clearTime: info.data.clearTime,
-            workPrice: info.data.workPrice,
-            enableWorkPrice: info.data.enableWorkPrice,
+            price: info.data.price || 0,
+            minHour: info.data.minHour || 2,
+            leadHour: info.data.leadHour || 0,
+            leadDay: info.data.leadDay || 0,
+            txStartHour: info.data.txStartHour || 22, // 默认22点开始通宵
+            txHour: info.data.txHour || 8, // 默认8小时通宵
+            txPrice: info.data.tongxiaoPrice || 0, // 默认通宵价格0
+            clearTime: info.data.clearTime || 0,
+            workPrice: info.data.workPrice || 0,
+            enableWorkPrice: info.data.enableWorkPrice || false,
             hour_options:hour_options,
             other_hour_options: other_hour_options,
             storeId: info.data.storeId,
-            timeHourAllArr: info.data.timeSlot.slice(0,24)
+            timeHourAllArr: timeHourAllArr
           });
           that.loadingtime();
           that.MathDate(new Date(that.data.submit_begin_time));
@@ -692,6 +739,8 @@ Page({
     var that = this;
     var atimeindex = event.currentTarget.dataset.index;//选中的时间索引
     var hour = event.currentTarget.dataset.hour;
+    console.log('选择时间:', atimeindex, hour);
+    
     if(atimeindex==that.data.select_time_index){
       that.setData({
         select_time_index: -1,
@@ -708,6 +757,13 @@ Page({
       if(that.data.scanCodeMsg){
          payselectindex = 3;
       }
+      
+      // 如果是通宵选择（hour为99），确保hour设置为99
+      if(hour == 99 || atimeindex == 99){
+        hour = 99;
+        console.log('选择通宵模式');
+      }
+      
       that.setData({
         payselectindex: payselectindex,
         select_time_index: atimeindex,
@@ -1058,20 +1114,30 @@ Page({
     }
     if(order_hour==99){
       nightLong=true;
-      //取通宵的时长
-      order_hour=that.data.txHour;
+      //取通宵的时长，确保有默认值
+      order_hour=that.data.txHour || 8; // 默认8小时通宵
+      console.log('通宵时长:', order_hour);
+      
       //判断开始时间 是否在通宵场的范围内 有两种情况 结束时间在当日和次日
-      if(startDate.getHours() < that.data.txStartHour){
-        //如果是凌晨4点之后的  那么开始时间就要改为当日通宵开始小时
-        if(startDate.getHours() >= 4){
-          startDate.setHours(that.data.txStartHour);
-          startDate.setMinutes(0)
-          startDate.setSeconds(0)
-          startDate.setMilliseconds(0);
-        }
+      var txStartHour = that.data.txStartHour || 22; // 默认22点开始通宵
+      
+      // 如果当前时间在通宵开始时间之前，设置为通宵开始时间
+      if(startDate.getHours() < txStartHour){
+        startDate.setHours(txStartHour);
+        startDate.setMinutes(0)
+        startDate.setSeconds(0)
+        startDate.setMilliseconds(0);
       }
-       var endDate=new Date(startDate.getTime()+1000*60*60*order_hour);
-       that.setData({
+      
+      // 确保order_hour是数字类型
+      order_hour = parseInt(order_hour) || 8;
+      var endDate=new Date(startDate.getTime()+1000*60*60*order_hour);
+      
+      console.log('通宵开始时间:', startDate);
+      console.log('通宵结束时间:', endDate);
+      console.log('通宵时长(小时):', order_hour);
+      
+      that.setData({
           nightLong: true,
           order_hour: order_hour,
           submit_couponInfo:{},//清空优惠券
@@ -1081,6 +1147,8 @@ Page({
           view_end_time: this.formatViewDate(endDate.getTime()).text,
        })
     }else{
+      // 确保order_hour是数字类型
+      order_hour = parseInt(order_hour) || that.data.minHour || 2;
       var endDate=new Date(startDate.getTime()+1000*60*60*order_hour);
       that.setData({
           nightLong: false,
@@ -1214,5 +1282,57 @@ Page({
     })
     that.MathDate(startDate);
     that.getPkgList();
+  },
+  // 切换预订类型
+  selectBookingType(e) {
+    let that = this;
+    let type = e.currentTarget.dataset.type;
+    that.setData({
+      bookingType: type
+    });
+    
+    // 根据预订类型切换显示的套餐列表
+    if (type === 'hour') {
+      that.setData({
+        select_pkg_index: -1, // 小时预订不显示套餐
+        pkgId: '',
+        order_hour: 2, // 小时预订默认选择2小时
+        nightLong: false,
+        submit_couponInfo: {},
+        payselectindex: 1,
+        select_time_index: 0, // 默认选择2小时
+      });
+      // 重新计算时间
+      var startDate = new Date();
+      that.MathDate(startDate);
+    } else {
+      that.setData({
+        select_pkg_index: -1, // 套餐预订不显示小时选择
+        pkgId: '',
+        order_hour: 2, // 套餐预订默认选择2小时
+        nightLong: false,
+        submit_couponInfo: {},
+        payselectindex: 1,
+        select_time_index: -1, // 套餐预订不显示小时选择
+      });
+      // 重新计算时间
+      var startDate = new Date();
+      that.MathDate(startDate);
+    }
+    that.MathPrice();
+  },
+  // 点击时间轴
+  selectTimeSlot(e) {
+    let that = this;
+    let hour = e.currentTarget.dataset.hour;
+    let startDate = new Date();
+    startDate.setHours(hour, 0, 0, 0);
+    
+    that.setData({
+      submit_begin_time: that.formatDate(startDate.getTime()).text,
+      view_begin_time: that.formatViewDate(startDate.getTime()).text
+    });
+    
+    that.MathDate(startDate);
   },
 })
