@@ -63,6 +63,11 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({
+        selected: 1
+      })
+    }
     let that = this;
     that.setData({
       isLogin:app.globalData.isLogin,
@@ -114,6 +119,26 @@ Page({
       })
     }
   },
+  //标签页切换
+  switchTab(event){
+    let that = this
+    let value = event.currentTarget.dataset.value
+    that.setData({
+      value1: parseInt(value)
+    })
+    
+    if(value == -1){
+      that.setData({
+        status: '',
+      })
+    }else{
+      that.setData({
+        status: parseInt(value),
+      })
+    }
+    that.getOrderListdata("refresh");
+  },
+  
   //状态下拉菜单发生变化
   OrderStatusDropdown(event){
     let that = this
