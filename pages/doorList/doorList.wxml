@@ -19,6 +19,8 @@
   <van-area
     area-list="{{areaList}}"
     value="{{areaValue}}"
+    columns-num="{{3}}"
+    columns-placeholder="{{['请选择','请选择','请选择']}}"
     bind:confirm="onAreaConfirm"
     bind:cancel="onAreaClose"
   />
@@ -30,7 +32,7 @@
     <block wx:if="{{MainStorelist.length>0}}">
       <view class="item" bind:tap="goStore" data-storeid="{{item.storeId}}" wx:for="{{MainStorelist}}" wx:key="MainStorelist">
           <view wx:if="{{item.headImg}}">
-            <image class="img" src="{{item.headImg}}" mode="scaleToFill"></image>
+            <image class="img" src="{{item.headImg}}" mode="scaleToFill" binderror="onImageError" data-index="{{index}}"></image>
           </view>
           <view wx:else>
             <image class="img" src="/logo.png" mode="aspectFit"></image>

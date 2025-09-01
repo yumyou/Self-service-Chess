@@ -1,0 +1,85 @@
+<!--pages/memberCenter/memberCenter.wxml-->
+<view class="container">
+  <!-- 头部导航 -->
+
+
+  <!-- 账户余额卡片 -->
+  <view class="balance-section">
+    <view class="balance-card">
+      <view class="balance-info">
+        <view class="balance-left">
+          <text class="balance-label">账户余额(元)</text>
+          <text class="balance-amount">{{userBalance}}</text>
+        </view>
+        <view class="balance-right">
+          <view class="detail-link" bindtap="goBalanceDetail">
+            <text>消费明细</text>
+            <van-icon name="arrow" size="14px" color="#999" />
+          </view>
+          <view class="coin-icon">
+            <image src="/pages/static/icon/ye.png" mode="widthFix" style="width: 40px;"></image>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-buttons">
+    <view class="button-group">
+      <view class="action-btn {{activeTab === 'recharge' ? 'active' : ''}}" bindtap="switchTab" data-tab="recharge">
+        账户充值
+      </view>
+      <view class="action-btn {{activeTab === 'record' ? 'active' : ''}}" bindtap="switchTab" data-tab="record">
+        账户记录
+      </view>
+    </view>
+  </view>
+
+  <!-- 充值选项 -->
+  <view class="recharge-section" wx:if="{{activeTab === 'recharge'}}">
+    <view class="section-title">充值选项</view>
+    <view class="recharge-grid">
+      <view class="recharge-item {{selectedAmount === item.payMoney ? 'selected' : ''}}" 
+            wx:for="{{rechargeOptions}}" 
+            wx:key="payMoney" 
+            bindtap="selectAmount" 
+            data-amount="{{item.payMoney}}">
+        <view class="amount">{{item.payMoney}}元</view>
+        <view class="bonus">送{{item.giftMoney}}元</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 账户记录 -->
+  <view class="record-section" wx:if="{{activeTab === 'record'}}">
+    <view class="section-title">账户记录</view>
+    <view class="record-list">
+      <block wx:if="{{recordList.length > 0}}">
+        <view class="record-item" wx:for="{{recordList}}" wx:key="id">
+          <view class="record-info">
+            <view class="record-title">{{item.title}}</view>
+            <view class="record-time">{{item.time}}</view>
+          </view>
+          <view class="record-amount {{item.type === 'income' ? 'income' : 'expense'}}">
+            {{item.type === 'income' ? '+' : '-'}}{{item.amount}}
+          </view>
+        </view>
+      </block>
+      <view class="empty-record" wx:else>
+        <view class="empty-icon">
+          <text class="icon-text">📋</text>
+        </view>
+        <view class="empty-text">暂无记录</view>
+        <view class="empty-desc">您还没有任何账户记录</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 充值按钮 -->
+  <view class="recharge-btn-section" wx:if="{{activeTab === 'recharge'}}">
+    <button class="recharge-btn" bindtap="submitRecharge" disabled="{{!selectedAmount}}">
+      立即充值
+    </button>
+  </view>
+</view>

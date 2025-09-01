@@ -4,7 +4,7 @@ page {
 }
 
 .container {
-  padding: 20rpx;
+  padding: 20rpx 40rpx;
   padding-bottom: 140rpx;
 }
 
@@ -38,13 +38,13 @@ page {
 .booking-type {
   display: flex;
   gap: 20rpx;
-  margin-bottom: 30rpx;
+  margin-bottom: 10rpx;
 }
 
 .type-item {
   flex: 1;
-  height: 80rpx;
-  line-height: 80rpx;
+  height: 60rpx;
+  line-height: 60rpx;
   text-align: center;
   border-radius: 12rpx;
   font-size: 28rpx;
@@ -68,7 +68,7 @@ page {
   border-radius: 16rpx;
   padding: 20rpx 0;
   gap: 15rpx;
-  margin-bottom: 30rpx;
+  margin-bottom: 20rpx;
   flex-wrap: wrap;
 }
 
@@ -96,7 +96,7 @@ page {
   align-items: center;
   justify-content: center;
   gap: 20rpx;
-  margin-bottom: 30rpx;
+  margin-bottom: 20rpx;
 }
 
 .time-label {
@@ -190,8 +190,9 @@ page {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6rpx; /* 减小内部元素间距 */
-  min-width: 32rpx; /* 减小最小宽度 */
+  gap: 10rpx; /* 减小内部元素间距 */
+  min-width: 5rpx; /* 减小最小宽度 */
+  width: 5rpx;
   flex-shrink: 0;
   cursor: pointer;
   transition: all 0.3s;

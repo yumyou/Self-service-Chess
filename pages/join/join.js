@@ -89,13 +89,14 @@ Page({
     if(that.data.phone == '' || that.data.name == '' || that.data.region.length==0){
       wx.showToast({
         title: '请填写完整',
+        icon: 'error'
       })
       return
     }
     if(!util1.checkPhone(that.data.phone)){
       wx.showToast({
         title: '请填写正确的手机号',
-        icon: 'none'
+        icon: 'error'
       })
       return
     }

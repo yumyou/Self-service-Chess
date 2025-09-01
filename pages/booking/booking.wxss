@@ -10,8 +10,75 @@ page{
   height: 100%;
  }
 
+/* 日期选择器样式 */
+.date-selector {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 40rpx 20rpx;
+  background: #fff;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+.container{}
+.date-scroll {
+  flex: 1;
+  white-space: nowrap;
+}
+
+.date-item {
+  display: inline-block;
+  width: 120rpx;
+  height: 120rpx;
+  margin-right: 16rpx;
+  border-radius: 12rpx;
+  border: 2rpx solid #f0f0f0;
+  text-align: center;
+  padding: 10rpx;
+  box-sizing: border-box;
+}
+
+.date-item.active {
+  border-color: #07c160;
+  background: #07c160;
+  color: #fff;
+}
+.logo-top{
+  background-color: #07c160;
+}
+
+.date-day {
+  font-size: 28rpx;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+}
+
+.date-week {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.date-item.active .date-week {
+  color: #fff;
+}
+
+.calendar-btn {
+  display: block;
+  width:120rpx;
+  height: 120rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12rpx;
+}
+
+.calendar-icon {
+  width: 40rpx;
+  height: 40rpx;
+}
+
 .logo-name{
-  margin-bottom: 0;
+  margin-bottom: 5rpx;
+  color: #fff !important;
 }
 .top-tabs-container {
   padding: 20rpx 23rpx;
@@ -25,19 +92,15 @@ page{
 }
 
 .top-tabs .tab {
-  width: 49.6%;
-  height: 80rpx;
+  color: #000;
+  border-left: 4rpx solid #07c160;
+  padding-left: 16rpx;
   font-size: 32rpx;
-  line-height: 80rpx;
   text-align: center;
-  background-color: #f5f5f5;
-  border-radius: 10rpx;
   margin: 0rpx 10rpx;
 }
 .top-tabs .tab.active {
-  background: var(--main-color);
-  color: #fff;
-  border-radius: 10rpx;
+  color: #000;
 }
 
 .top-waring-container {
@@ -172,7 +235,7 @@ page{
 .lists .item .top .right .name{
   font-weight: 700;
   font-size: 30rpx;
-}
+} 
 .lists .item .top .right .name .type{
   font-size: 30rpx;
 }
@@ -196,7 +259,8 @@ page{
 }
 .priceLabel {
   display: flex;
-  align-items: center;
+  align-items: start;
+  flex-direction: column;
   flex-wrap: wrap;
 }
 .lists .item .top .right .priceLabel .price{
@@ -209,10 +273,12 @@ page{
   font-weight: 700;
   font-size: 26rpx;
   line-height: 32rpx;
+  color: #07c160;
 }
 .lists .item .top .right .bottom{
   display: flex;
   justify-content: right;
+  flex-direction: column;
   align-items: center;
 }
 
@@ -309,4 +375,204 @@ page{
   line-height: 48rpx;
   font-size: 24rpx;
   color: #666;
+}
+
+/* 新增状态样式 */
+.status-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.status-text {
+  font-size: 24rpx;
+  margin-bottom: 8rpx;
+}
+
+.status-text.disabled {
+  color: #999;
+}
+
+.status-text.available {
+  color: #07c160;
+}
+
+.status-text.cleaning {
+  color: #ff9500;
+}
+
+.status-text.occupied {
+  color: #ff3b30;
+}
+
+.status-text.booked {
+  color: #007aff;
+}
+
+.original-price {
+  font-size: 24rpx;
+  color: #999;
+  text-decoration: line-through;
+  margin-top: 8rpx;
+}
+
+.action-btn-2 {
+  background: #07c160;
+  color: #fff;
+  padding: 12rpx 24rpx;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  text-align: center;
+}
+
+/* 时间轴样式 */
+.lists .item .foot .foot-top .labels .label.unavailable::before {
+  background: #e8e8e8;
+}
+
+.lists .item .foot .foot-top .labels .label.available::before {
+  background: #fff;
+  border: 1rpx solid #ddd;
+}
+
+.lists .item .foot .foot-top .labels .label.low-price::before {
+  background: #07c160;
+}
+
+.lists .item .foot .foot-top .labels .label.high-price::before {
+  background: #ff9500;
+}
+
+.lists .item .foot .times .time.unavailable {
+  background: #e8e8e8;
+  color: #999;
+}
+
+.lists .item .foot .times .time.available {
+  background: #fff;
+  border: 1rpx solid #ddd;
+  color: #333;
+}
+
+.lists .item .foot .times .time.low-price {
+  background: #07c160;
+  color: #fff;
+}
+
+.lists .item .foot .times .time.high-price {
+  background: #ff9500;
+  color: #fff;
+}
+
+/* —— 对齐 orderSubmit 的时间轴风格 —— */
+.timeline {
+  margin-bottom: 30rpx;
+}
+
+.timeline-slots {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30rpx;
+  position: relative;
+  padding: 0 10rpx;
+  overflow-x: auto;
+  gap: 8rpx;
+}
+
+.timeline-slots::before {
+  content: '';
+  position: absolute;
+  top: 30rpx;
+  left: 20rpx;
+  right: 20rpx;
+  height: 3rpx;
+  background: #e8e8e8;
+  z-index: 1;
+}
+
+.time-slot {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10rpx;
+  min-width: 5rpx;
+  width: 5rpx;
+  flex-shrink: 0;
+  transition: all 0.3s;
+}
+
+.time-slot:active {
+  transform: scale(0.95);
+}
+
+.slot-marker {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: #e8e8e8;
+  border: 2rpx solid #e8e8e8;
+  transition: all 0.3s;
+}
+
+.slot-marker.disabled {
+  background: #e8e8e8;
+  border-color: #e8e8e8;
+}
+
+.slot-marker.low-price {
+  background: #07c160;
+  border-color: #07c160;
+}
+
+.slot-marker.high-price {
+  background: #ff9500;
+  border-color: #ff9500;
+}
+
+.slot-time {
+  font-size: 20rpx;
+  color: #aaa;
+  line-height: 1;
+  white-space: nowrap;
+  transition: all 0.3s;
+}
+
+.timeline-legend {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20rpx;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  font-size: 22rpx;
+  color: #666;
+}
+
+.legend-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+}
+
+.legend-dot.unavailable {
+  background: #e8e8e8;
+}
+
+.legend-dot.available {
+  background: #fff;
+  border: 2rpx solid #e8e8e8;
+}
+
+.legend-dot.low-price {
+  background: #07c160;
+}
+
+.legend-dot.high-price {
+  background: #ff9500;
 }

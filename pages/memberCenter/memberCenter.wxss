@@ -1,0 +1,301 @@
+/* pages/memberCenter/memberCenter.wxss */
+.container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding-bottom: 120rpx;
+}
+
+/* 头部导航 */
+.header {
+  background-color: #fff;
+  padding: 0 30rpx;
+  padding-top: 44px;
+  padding-bottom: 20rpx;
+}
+
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 88rpx;
+}
+
+.back-btn {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.placeholder {
+  width: 60rpx;
+}
+
+/* 账户余额卡片 */
+.balance-section {
+  padding: 30rpx;
+}
+
+.balance-card {
+  background: linear-gradient(135deg, #1a1919 0%, #383838 100%);
+  border-radius: 20rpx;
+  padding: 40rpx 30rpx;
+  color: #fff;
+}
+
+.balance-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.balance-left {
+  flex: 1;
+}
+
+.balance-label {
+  font-size: 28rpx;
+  color: #ccc;
+  display: block;
+  margin-bottom: 20rpx;
+}
+
+.balance-amount {
+  font-size: 60rpx;
+  font-weight: bold;
+  color: #fff;
+  display: block;
+}
+
+.balance-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.detail-link {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+  color: #ccc;
+  margin-bottom: 20rpx;
+}
+
+.coin-icon {
+  width: 80rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 操作按钮 */
+.action-buttons {
+  padding: 0 30rpx 40rpx;
+}
+
+.button-group {
+  display: flex;
+  justify-content: start;
+  gap: 20rpx;
+  width: auto;
+  border-radius: 16rpx;
+  padding: 8rpx;
+}
+
+.action-btn {
+  height: 55rpx;
+  padding: 0 20rpx;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  color: #000;
+  border-radius: 40rpx;
+  transition: all 0.3s ease;
+  border: 1px solid #ccc;
+}
+
+.action-btn.active {
+  border: 1px solid #07c160;
+  color: #07c160;
+  background-color: #f0f9f0;
+}
+
+/* 充值选项 */
+.recharge-section {
+  margin: 0 30rpx;
+  margin-bottom: 20rpx;
+  padding: 30rpx;
+  border-radius: 28rpx;
+  background-color: #fff;
+}
+
+.section-title {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 30rpx;
+  padding-left: 10rpx;
+}
+
+.recharge-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20rpx;
+}
+
+.recharge-item {
+  border: 2rpx solid #e0e0e0;
+  border-radius: 28rpx;
+  padding: 20rpx 15rpx;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.recharge-item.selected {
+  border-color: #07c160;
+  background-color: #f0f9f0;
+  box-shadow: 0 4rpx 12rpx rgba(7, 193, 96, 0.2);
+}
+
+.recharge-item .amount {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 8rpx;
+}
+
+.recharge-item .bonus {
+  font-size: 28rpx;
+  color: #999;
+  font-weight: 500;
+}
+
+/* 账户记录 */
+.record-section {
+  padding: 0 30rpx;
+}
+
+.record-list {
+  background-color: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.record-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.record-item:last-child {
+  border-bottom: none;
+}
+
+.record-info {
+  flex: 1;
+}
+
+.record-title {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.record-time {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.record-amount {
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.record-amount.income {
+  color: #07c160;
+}
+
+.record-amount.expense {
+  color: #ff4757;
+}
+
+/* 无记录状态 */
+.empty-record {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 30rpx;
+  text-align: center;
+}
+
+.empty-icon {
+  margin-bottom: 30rpx;
+  opacity: 0.6;
+}
+
+.icon-text {
+  font-size: 80rpx;
+  display: block;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: #999;
+  margin-bottom: 15rpx;
+  font-weight: 500;
+}
+
+.empty-desc {
+  font-size: 26rpx;
+  color: #ccc;
+}
+
+/* 充值按钮 */
+.recharge-btn-section {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  padding: 30rpx;
+  padding-bottom: calc(env(safe-area-inset-bottom));
+  box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.1);
+}
+
+.recharge-btn {
+  width: 100%;
+  height: 88rpx;
+  background: linear-gradient(135deg, #07c160 0%, #00a854 100%);
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 600;
+  border: none;
+  border-radius: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.recharge-btn:disabled {
+  background: #ccc;
+  color: #999;
+}
+
+.recharge-btn:not(:disabled):active {
+  transform: scale(0.98);
+  box-shadow: 0 2rpx 8rpx rgba(7, 193, 96, 0.3);
+}

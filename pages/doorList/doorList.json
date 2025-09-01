@@ -1,5 +1,9 @@
 {
   "navigationBarTextStyle": "black",
   "navigationBarTitleText": "切换门店",
-    "usingComponents": {}
+  "usingComponents": {
+    "van-popup": "@vant/weapp/popup/index",
+    "van-area": "@vant/weapp/area/index",
+    "van-icon": "@vant/weapp/icon/index"
+  }
 }

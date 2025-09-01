@@ -1,0 +1,452 @@
+/* pages/iotDevice/iotDevice.wxss */
+
+.container {
+  height: 100vh;
+  overflow: auto;
+  background-color: #f5f5f5;
+}
+
+/* 自定义导航栏 */
+.custom-navbar {
+  background-color: #fff;
+  border-bottom: 1px solid #e8e8e8;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.navbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 44px;
+  padding: 0 16px;
+}
+
+.navbar-left {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  flex: 1;
+  text-align: center;
+}
+
+.navbar-right {
+  width: 44px;
+}
+
+/* 主要内容区域 */
+.main-content {
+  padding-top: 0;
+}
+
+/* 卡片通用样式 */
+.device-info-card,
+.properties-card,
+.property-set-card,
+.history-query-card,
+.history-data-card {
+  background-color: #fff;
+  border-radius: 12px;
+  margin: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.device-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.device-status {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 12px;
+  background-color: #f5f5f5;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* 设备详情 */
+.device-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.detail-item .label {
+  font-size: 14px;
+  color: #333;
+}
+
+.detail-item .label {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.detail-item .value {
+  font-size: 14px;
+  color: #333;
+  max-width: 60%;
+  text-align: right;
+  word-break: break-all;
+}
+
+/* 属性列表 */
+.properties-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.property-item {
+  padding: 12px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #07c160;
+}
+
+.property-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.property-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.property-time {
+  font-size: 12px;
+  color: #999;
+}
+
+.property-value {
+  background-color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #e8e8e8;
+}
+
+.value-text {
+  font-size: 14px;
+  color: #333;
+  word-break: break-all;
+}
+
+/* 属性设置表单 */
+.property-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+/* 设备列表 */
+.device-list {
+  padding: 12px;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 0 4px;
+}
+
+.list-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.device-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.device-item {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border-left: 4px solid #07c160;
+}
+
+.device-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.device-item-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.device-item-status {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 12px;
+  background-color: #f5f5f5;
+}
+
+.device-item-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.device-id {
+  font-size: 12px;
+  color: #666;
+}
+
+.device-time {
+  font-size: 12px;
+  color: #999;
+}
+
+/* 加载更多 */
+.load-more {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+.empty-text {
+  margin-top: 12px;
+  font-size: 14px;
+  color: #999;
+}
+
+/* 历史数据查询 */
+.query-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.time-range {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 历史数据列表 */
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.history-item {
+  padding: 12px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #1890ff;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.history-property {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.history-time {
+  font-size: 12px;
+  color: #999;
+}
+
+.history-value {
+  background-color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #e8e8e8;
+}
+
+/* 标签页样式优化 */
+.van-tabs__nav {
+  background-color: #fff;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.van-tab {
+  color: #666;
+  font-weight: 500;
+}
+
+.van-tab--active {
+  color: #07c160;
+  font-weight: 600;
+}
+
+.van-tabs__line {
+  background-color: #07c160;
+}
+
+/* 按钮样式优化 */
+.van-button--primary {
+  background-color: #07c160;
+  border-color: #07c160;
+}
+
+.van-button--primary:active {
+  background-color: #06ad56;
+  border-color: #06ad56;
+}
+
+/* 输入框样式优化 */
+.van-field__label {
+  color: #333;
+  font-weight: 500;
+}
+
+.van-field__input {
+  color: #333;
+}
+
+.van-field__placeholder {
+  color: #999;
+}
+
+/* 响应式设计 */
+@media (max-width: 375px) {
+  .device-info-card,
+  .properties-card,
+  .property-set-card,
+  .history-query-card,
+  .history-data-card {
+    margin: 8px;
+    padding: 12px;
+  }
+  
+  .card-title {
+    font-size: 15px;
+  }
+  
+  .device-name {
+    font-size: 16px;
+  }
+}
+
+/* 动画效果 */
+.device-item,
+.property-item,
+.history-item {
+  transition: all 0.3s ease;
+}
+
+.device-item:active,
+.property-item:active,
+.history-item:active {
+  transform: scale(0.98);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 加载状态 */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+/* 错误状态 */
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #ff4d4f;
+}
+
+.error-text {
+  margin-top: 12px;
+  font-size: 14px;
+  color: #ff4d4f;
+}
+
+/* 成功状态 */
+.success-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #07c160;
+}
+
+.success-text {
+  margin-top: 12px;
+  font-size: 14px;
+  color: #07c160;
+}
+

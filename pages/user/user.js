@@ -264,4 +264,32 @@ Page({
       url: '../login/login',
     })
   },
+  // 跳转到会员中心
+  goMemberCenter: function() {
+    if (!app.globalData.isLogin) {
+      wx.navigateTo({
+        url: '../login/login',
+      });
+      return;
+    }
+    wx.navigateTo({
+      url: '../memberCenter/memberCenter',
+    });
+  },
+  // 跳转到物联网设备管理
+  goIotDevice: function() {
+    if (!app.globalData.isLogin) {
+      wx.navigateTo({
+        url: '../login/login',
+      });
+      return;
+    }
+    wx.navigateTo({
+      url: '../iotDevice/iotDevice',
+    });
+  },
+  // 阻止事件冒泡
+  stopPropagation: function(e) {
+    // 阻止事件冒泡，防止触发父元素的点击事件
+  },
 })

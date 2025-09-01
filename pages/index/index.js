@@ -14,22 +14,15 @@ Page({
     storeEnvImg:[],//图片数组
     bannerImg:[],//banner
     doorinfodata:{},//门店信息
-    roomClass: [],//房间种类筛选
-    timeselectindex:0,//日期选择索引值
-    timebg_primary:'bg-primary',
-    timebg_primary_no:'',
-    timeDayArr:[],//时间展示日期：年月日
-    timeWeekArr:[],//时间展示：星期
-    doorlistArr:[],//房间数组
-    timeHourArr:[],//小时数组
-    timeHourAllArr:[],//所有门店小时数组
+    storeList:[],//门店数组
+    filteredStoreList:[],//筛选后的门店数组
+    currentFilter: 'billiards',//当前筛选类型
     isLogin: app.globalData.isLogin,
     popshow: false,
     wifiShow: false,
     simpleModel: '',//简洁模式
     maoHeight:0,//锚链接跳转高度
-    tabIndex: 0,
-businessHours: '00:00-24:00', // 营业时间
+    businessHours: '00:00-24:00', // 营业时间
   },
 
   /**
@@ -111,6 +104,7 @@ businessHours: '00:00-24:00', // 营业时间
         }
       }
     }
+
     console.log('最终的门店id:'+that.data.storeId)
     if(that.data.storeId){
       that.loadingtime();
@@ -119,7 +113,9 @@ businessHours: '00:00-24:00', // 营业时间
         popshow: popshow
       })
     }
-    this.getDoorListdata();
+    // 获取门店列表数据
+    this.getStoreListData();
+    this.filterStores();
   },
   popClose:function(){
     this.setData({popshow: false})
@@ -748,47 +744,16 @@ businessHours: '00:00-24:00', // 营业时间
 
 
     //新增
-    // 修改goOrder方法以支持新的UI交互
-goOrder(e){
+    // 跳转到门店详情页面
+goStoreDetail(e){
   var that = this;
-  let status = e.currentTarget.dataset.status;
-  if(status == 0){
-    wx.showToast({
-      title: '该房间暂不可用',
-      icon: 'none'
-    });
-    return
-  }
+  let storeId = e.currentTarget.dataset.storeid;
+  console.log('goStoreDetail', storeId);
   
-  let aroomid = e.currentTarget.dataset.info;
-  var atime = '';
-  if(that.data.timeselectindex >= 0)
-    atime = that.data.timeDayArr[that.data.timeselectindex];
-  var storeId = that.data.storeId
-  
-  if(status == 2){
-    if(that.data.doorinfodata.clearOpen){
-      wx.showModal({
-        title: '温馨提示',
-        content: '您选择的此场地暂未清洁，介意请勿预订！',
-        confirmText: '继续预订',
-        cancelText: '取消',
-        complete: (res) => {
-          if (res.confirm) {
-            that.navigateToOrder(aroomid, atime, storeId);
-          }
-        }
-      })
-    }else{
-      wx.showModal({
-        title: '温馨提示',
-        content: '房间暂未清洁，禁止预订！',
-        showCancel: false
-      })
-    }
-  }else{
-    that.navigateToOrder(aroomid, atime, storeId);
-  }
+  // 跳转到门店详情页面（房间列表页面）
+  wx.navigateTo({
+    url: '../booking/booking?storeId=' + storeId
+  })
 },
 
 // 新增导航到订单页面的方法
@@ -798,48 +763,83 @@ navigateToOrder(roomId, daytime, storeId) {
   })
 },
 
-// 修改getDoorListdata方法以添加距离计算
-getDoorListdata: function(e){
+// 获取门店列表数据
+getStoreListData: function(e){
   var that = this;
-  if (that.data.storeId) {
-    http.request(
-      "/member/index/getRoomInfoList",
-      "1",
-      "post", {
-        "storeId": that.data.storeId,
-        "roomClass": that.data.tabIndex,
-      },
-      app.globalData.userDatatoken.accessToken,
-      "获取中...",
-      function success(info) {
-        if (info.code == 0) {
-          // 为每个房间添加距离信息（模拟数据，实际应该从后端获取）
-          let roomsWithDistance = info.data.map((room, index) => {
-            return {
-              ...room,
-              distance: (Math.random() * 5 + 0.1).toFixed(1) // 随机生成0.1-5.1km的距离
-            }
-          });
-          
-          that.setData({
-            doorlistArr: roomsWithDistance
-          });
-          that.setroomlistHour(0);
-        }else{
-          wx.showModal({
-            content: '请求服务异常，请稍后重试',
-            showCancel: false,
-          })
-        }
-      },
-      function fail(info) {
-        wx.showToast({
-          title: '网络请求失败',
-          icon: 'none'
+  http.request(
+    "/member/index/getStoreList",
+    "1",
+    "post", {
+      "pageNo": 1,
+      "pageSize": 20,
+      "name": "",
+      "cityName": ""
+    },
+    app.globalData.userDatatoken.accessToken,
+    "获取中...",
+    function success(info) {
+      if (info.code == 0) {
+        // 为每个门店添加距离信息和房间数量（模拟数据，实际应该从后端获取）
+        let storesWithDistance = info.data.list.map((store, index) => {
+          return {
+            ...store,
+            distance: (Math.random() * 5 + 0.1).toFixed(1), // 随机生成0.1-5.1km的距离
+            roomCount: Math.floor(Math.random() * 10) + 5 // 随机生成5-15个房间
+          }
         });
+        
+        that.setData({
+          storeList: storesWithDistance,
+          filteredStoreList: storesWithDistance // 初始化筛选列表为全部门店
+        });
+      }else{
+        wx.showModal({
+          content: '请求服务异常，请稍后重试',
+          showCancel: false,
+        })
       }
-    )
-  } 
+    },
+    function fail(info) {
+      wx.showToast({
+        title: '网络请求失败',
+        icon: 'none'
+      });
+    }
+  )
+},
+
+// 筛选门店方法（兼容直接调用与事件调用）
+filterStores: function(e) {
+  var that = this;
+  let filterType = 'all';
+  if (e && e.currentTarget && e.currentTarget.dataset && e.currentTarget.dataset.type) {
+    filterType = e.currentTarget.dataset.type;
+  } else if (typeof e === 'string') {
+    filterType = e;
+  }
+  
+  that.setData({ currentFilter: filterType });
+  
+  let filteredList = [];
+  
+  if (filterType === 'all') {
+    // 显示全部门店
+    filteredList = that.data.storeList;
+  } else if (filterType === 'billiards') {
+    // 筛选包含"台球"的门店
+    filteredList = that.data.storeList.filter(store => {
+      return store.storeName && store.storeName.includes('台球');
+    });
+  } else if (filterType === 'chess') {
+    // 筛选不包含"台球"的门店（归为棋牌类）
+    filteredList = that.data.storeList.filter(store => {
+      return store.storeName && !store.storeName.includes('台球');
+    });
+  }
+  
+  that.setData({
+    filteredStoreList: filteredList
+  });
 },
 
 // 新增快速预订方法

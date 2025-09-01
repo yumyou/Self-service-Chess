@@ -43,6 +43,25 @@ Page({
       this.getDoorListdata()
     })
   },
+  
+  // 选择日期
+  selectDate(e) {
+    const index = e.currentTarget.dataset.index;
+    this.setData({
+      timeselectindex: index
+    }, () => {
+      this.getDoorListdata();
+    });
+  },
+  
+  // 打开日历
+  openCalendar() {
+    // 这里可以添加日历选择功能
+    wx.showToast({
+      title: '日历功能开发中',
+      icon: 'none'
+    });
+  },
   /**
    * 生命周期函数--监听页面加载
    */
@@ -379,8 +398,17 @@ Page({
           console.info("返回111===");
           console.info(info);
           if (info.code == 0) {
+            // 为每个房间添加模拟数据
+            let roomsWithData = info.data.map((room, index) => {
+              return {
+                ...room,
+                originalPrice: room.price * 1.5, // 原价
+                timeSlot: that.generateTimeSlots() // 生成时间轴数据
+              }
+            });
+            
             that.setData({
-              doorlistArr: info.data,
+              doorlistArr: roomsWithData,
             });
             that.setroomlistHour(0);
           } else {
@@ -393,6 +421,24 @@ Page({
         function fail(info) {}
       );
     }
+  },
+  
+  // 生成时间轴数据
+  generateTimeSlots: function() {
+    let timeSlots = [];
+    for (let i = 0; i < 24; i++) {
+      let hourOnly = i.toString().padStart(2, '0');
+      let hour = hourOnly + ':00';
+      let slot = {
+        hour: hour,
+        displayHour: hourOnly,
+        disable: Math.random() < 0.2, // 20%概率不可用
+        lowPrice: Math.random() < 0.3, // 30%概率低价时段
+        highPrice: Math.random() < 0.2 // 20%概率高价时段
+      };
+      timeSlots.push(slot);
+    }
+    return timeSlots;
   },
   //设置列表禁用时间轴
   setroomlistHour: function (aindex) {

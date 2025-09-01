@@ -12,12 +12,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@vant/area-data": "^1.5.2",
     "@vant/weapp": "^1.10.22"
   },
   "directories": {
     "lib": "lib"
   },
-  "devDependencies": {},
   "keywords": [],
   "description": ""
 }

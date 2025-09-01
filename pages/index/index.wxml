@@ -2,7 +2,7 @@
 <view class="container">
   <!-- 背景图片 -->
   <image class="background" src="/pages/static/img/home.png" mode="aspectFill"></image>
-  <image class="home-text" src="/pages/static/img/bb.png"></image>
+  <image class="home-text" src="/pages/static/img/bb.png" mode="aspectFit"></image>
   <image class="home-logo" src="/pages/static/img/home-logo.png" mode="aspectFit" style="width: 100%;"></image>
   <!-- banner轮播图 -->
   <!-- 门店信息 -->
@@ -53,65 +53,47 @@
       <view class="name">俱乐部加盟</view>
     </view>
   </view>
-  <!-- 房间类型选项卡 -->
-  <view class="top-tabs-container" wx:if="{{roomClass&&roomClass.length>1}}">
-    <view class="top-tabs">
-      <block wx:for="{{roomClass}}" wx:key="roomClass">
-        <view data-index="{{item.value}}" class="top-tab {{tabIndex === item.value ? 'top-tab-active' : ''}}" bind:tap="tabChange">
-          {{item.text}}
-        </view>
-      </block>
+  <!-- 门店列表 -->
+  <!-- 筛选标签 -->
+  <view class="filter-tabs">
+    <view class="filter-tab {{currentFilter === 'billiards' ? 'active' : ''}}" bindtap="filterStores" data-type="billiards">
+      台球
+    </view>
+    <view class="filter-tab {{currentFilter === 'chess' ? 'active' : ''}}" bindtap="filterStores" data-type="chess">
+      棋牌
     </view>
   </view>
-  <!-- 房间列表 -->
-  <view class="room-lists" wx:for="{{doorlistArr}}" wx:key="doorlistArr" id="roomList">
-    <view class="room-card">
-      <!-- 房间图片 -->
-      <view class="room-image-container">
-        <block wx:if="{{item.imageUrls.length>0}}">
-          <image class="room-card-image" src="{{magic.split(item.imageUrls)[0]}}" catchtap="imgYu" data-index="{{index}}" mode="aspectFill"></image>
+  
+  <view class="store-lists" >
+    <view class="store-card" wx:for="{{filteredStoreList}}" wx:key="storeId" id="storeList">
+      <!-- 门店图片 -->
+      <view class="store-image-container">
+        <block wx:if="{{item.headImg}}">
+          <image class="store-card-image" src="{{item.headImg}}" catchtap="imgYu" data-index="{{index}}" mode="aspectFill"></image>
         </block>
         <block wx:else>
-          <image class="room-card-image" src="/logo.png" mode="aspectFill"></image>
+          <image class="store-card-image" src="/logo.png" mode="aspectFill"></image>
         </block>
       </view>
-      <!-- 房间信息区域 -->
-      <view class="room-card-content" bind:tap="goOrder" data-status="{{item.status}}" data-index="{{index}}" data-info="{{item.roomId}}">
-        <!-- 房间名称 -->
+      <!-- 门店信息区域 -->
+      <view class="store-card-content" bind:tap="goStoreDetail" data-storeid="{{item.storeId}}" data-index="{{index}}">
+        <!-- 门店名称 -->
         <view>
-          <view class="room-card-title">
-            {{item.roomName}}
-            <block wx:if="{{item.type == 0}}">
-              <text class="room-type-tag special">特价包</text>
-            </block>
-            <block wx:elif="{{item.type == 1}}">
-              <text class="room-type-tag small">小包</text>
-            </block>
-            <block wx:elif="{{item.type == 2}}">
-              <text class="room-type-tag medium">中包</text>
-            </block>
-            <block wx:elif="{{item.type == 3}}">
-              <text class="room-type-tag large">大包</text>
-            </block>
-            <block wx:elif="{{item.type == 4}}">
-              <text class="room-type-tag luxury">豪包</text>
-            </block>
-            <block wx:else>
-              <text class="room-type-tag business">商务包</text>
-            </block>
+          <view class="store-card-title">
+            {{item.storeName}}
           </view>
           <!-- 营业时间 -->
-          <view class="room-card-info">
+          <view class="store-card-info">
             <view class="info-icon iconfont icon-shijian"></view>
-            <text class="info-text">营业时间: {{doorinfodata.businessHours || '00:00-24:00'}}</text>
+            <text class="info-text">营业时间: {{item.businessHours || '00:00-24:00'}}</text>
           </view>
           <!-- 地址信息 -->
-          <view class="room-card-info">
+          <view class="store-card-info">
             <view class="info-icon iconfont icon-dingwei"></view>
-            <text class="info-text">{{doorinfodata.address}}</text>
+            <text class="info-text">{{item.address}}</text>
           </view>
           <!-- 距离信息 -->
-          <view class="room-card-info">
+          <view class="store-card-info">
             <view class="info-icon iconfont icon-juli"></view>
             <text class="info-text">距离 {{item.distance || '0.5'}}km</text>
           </view>
@@ -119,13 +101,13 @@
         <view>
           <view class="app-icon">
             <view class="left-section">
-              <text>空间</text>
+              <text>房间</text>
             </view>
             <view class="right-section">
-              <text>7间</text>
+              <text>{{item.roomCount || '7'}}间</text>
             </view>
           </view>
-          <view class="action-btn-2 reserve-btn" catchtap="goOrder" data-status="{{item.status}}" data-index="{{index}}" data-info="{{item.roomId}}">
+          <view class="action-btn-2 reserve-btn" catchtap="goStoreDetail" data-storeid="{{item.storeId}}" data-index="{{index}}">
             <view class="btn-icon iconfont icon-phone" style="color: #fff;"></view>
             <text style="margin:-10rpx 10rpx;color: #fff;"> | </text>
             <text style="color: #fff;">立即预订</text>
@@ -134,6 +116,7 @@
       </view>
       <!-- 操作按钮区域 -->
     </view>
+    <view style="height:100rpx"></view>
   </view>
 
 </view>

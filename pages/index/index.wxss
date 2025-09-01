@@ -22,29 +22,82 @@ page {
 .home-text{
   width: 100%;
   margin-top: 80rpx;
-  margin-bottom: -100rpx;
+  margin-bottom: -50rpx;
 
-  padding: 80rpx;
+  padding: 20rpx;
   box-sizing: border-box;
 }
+
 .container {
-  padding: 100rpx 50rpx;
   width: 100%;
-  min-height: 100vh;
+  height: 200vh;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   position: relative;
+  overflow: hidden;
 }
 
-/* 房间列表样式 */
-.room-lists {
+/* 门店列表样式 */
+
+/* 筛选标签样式 */
+.filter-tabs {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding: 20rpx 0;
+  background: transparent;
+  margin: 20rpx 0;
+}
+
+.filter-tab {
+  text-align: center;
+  padding: 20rpx 10rpx;
+  margin: 0 20rpx;
+  font-size: 38rpx;
+  color: #f7d371;
+  font-weight: bold;
+
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.filter-tab.active {
+  color: #f7d371;
+  font-size: 48rpx;
+  font-weight: bold;
+}
+
+.filter-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60rpx;
+  height: 4rpx;
+  color: #ffd45d;
+  background: #ffd45d;
+  border-radius: 2rpx;
+}
+
+.store-lists {
   width: 100%;
   box-sizing: border-box;
   margin-top: 20rpx;
-}
+  overflow: auto;
+  height:calc(100vh - 500rpx);
 
-.room-card {
+  -webkit-overflow-scrolling: touch; /* iOS 平滑滚动 */
+  scrollbar-width: none; /* Firefox 兼容 */
+}
+.store-lists::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Edge 隐藏滚动条 */
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent;
+}
+.store-card {
   background: #fff;
   margin-bottom: 20rpx;
   border-radius: 20rpx;
@@ -53,15 +106,15 @@ page {
   position: relative;
 }
 
-/* 房间图片容器 */
-.room-image-container {
+/* 门店图片容器 */
+.store-image-container {
   width: 100%;
   height: 300rpx;
   position: relative;
   overflow: hidden;
 }
 
-.room-card-image {
+.store-card-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -84,7 +137,7 @@ page {
 /* 左侧橙色部分 */
 .left-section {
   flex: 1;
-  background-color: #ff8000b4;
+  background-color: rgba(247, 207, 161, 0.74);
   /* 橙色背景 */
   display: flex;
   justify-content: center;
@@ -112,23 +165,25 @@ page {
 .left-section text,
 .right-section text {
   color: #FF8000;
+  font-weight: bold;
+
 }
 
 .right-section text {
-  color: #FF9500;
+  color: #FF8000;
   /* 右侧文字橙色 */
 }
 
-/* 房间信息内容区域 */
-.room-card-content {
+/* 门店信息内容区域 */
+.store-card-content {
   display: flex;
   justify-content: space-between;
   padding: 24rpx;
   background: #fff;
 }
 
-/* 房间标题 */
-.room-card-title {
+/* 门店标题 */
+.store-card-title {
   font-size: 32rpx;
   font-weight: 600;
   color: #333;
@@ -137,54 +192,15 @@ page {
   align-items: center;
 }
 
-/* 房间类型标签 */
-.room-type-tag {
-  font-size: 20rpx;
-  font-weight: 400;
-  padding: 4rpx 12rpx;
-  border-radius: 12rpx;
-  margin-left: 12rpx;
-}
-
-.room-type-tag.special {
-  background: #ff6b6b;
-  color: #fff;
-}
-
-.room-type-tag.small {
-  background: #4ecdc4;
-  color: #fff;
-}
-
-.room-type-tag.medium {
-  background: #45b7d1;
-  color: #fff;
-}
-
-.room-type-tag.large {
-  background: #f9ca24;
-  color: #333;
-}
-
-.room-type-tag.luxury {
-  background: #6c5ce7;
-  color: #fff;
-}
-
-.room-type-tag.business {
-  background: #a0a0a0;
-  color: #fff;
-}
-
-/* 房间信息项 */
-.room-card-info {
+/* 门店信息项 */
+.store-card-info {
   display: flex;
   align-items: center;
   font-size: 24rpx;
   color: #666;
 }
 
-.room-card-info:last-child {
+.store-card-info:last-child {
   margin-bottom: 0;
 }
 
@@ -346,10 +362,10 @@ page {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: auto;
   background-size: 100% auto;
   background-repeat: repeat-y;
-  min-height: 200vh;
+  height: 200vh;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: -1;
 }
@@ -428,7 +444,7 @@ page {
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 20rpx;
   padding: 60rpx;
-  margin-top: 150rpx;
+  margin-top: 220rpx;
 
   padding-bottom: 70rpx;
   box-sizing: border-box;
@@ -878,13 +894,13 @@ page {
   width: auto;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 16rpx;
-  padding: 20rpx;
-  margin: 0 50rpx 50rpx 50rpx;
+  padding: 32rpx;
+  margin: 0 40rpx 40rpx 40rpx;
   box-sizing: border-box;
   box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.15);
   position: relative;
   overflow: hidden;
-  min-height: 180rpx;
+  min-height: 240rpx;
 }
 
 .store-info-content {
@@ -904,7 +920,7 @@ page {
   font-size: 40rpx;
   font-weight: 600;
   color: #f4e3cc;
-  margin-bottom: 12rpx;
+  margin-bottom: 30rpx;
   line-height: 1.2;
 }
 

@@ -27,14 +27,14 @@
     </block>
   </view>
   <!-- 账户余额卡片 -->
-  <view class="blue-jb">
+  <view class="blue-jb" bindtap="goMemberCenter">
     <view class="balance-card">
       <view class="balance-header">
         <view class="balance-icon">
           <image src="/pages/static/icon/ye.png" mode="widthFix" style="width: 30px;"></image>
         </view>
         <text class="balance-title">账户余额</text>
-        <navigator class="recharge-btn" url="{{isLogin?'../recharge/recharge':'../login/login'}}">
+        <navigator class="recharge-btn" url="{{isLogin?'../recharge/recharge':'../login/login'}}" catchtap="stopPropagation">
           <text style="font-size: 16px;">立即充值</text>
         </navigator>
       </view>
@@ -43,7 +43,7 @@
         <text class="currency">（余额可用门店）</text>
       </view>
       <view class="balance-footer">
-        <navigator class="balance-item" url="{{isLogin?'../getBalance/getBalance':'../login/login'}}">
+        <navigator class="balance-item" url="{{isLogin?'../getBalance/getBalance':'../login/login'}}" catchtap="stopPropagation">
           <view class="coin-icon">
             <image src="/pages/static/icon/jf.png" mode="widthFix" style="width: 30px;"></image>
           </view>
@@ -52,7 +52,7 @@
             <text class="balance-value">{{userinfo.giftBalance || '0.00'}}</text>
           </view>
         </navigator>
-        <navigator class="balance-item" url="{{isLogin?'../coupon/coupon':'../login/login'}}">
+        <navigator class="balance-item" url="{{isLogin?'../coupon/coupon':'../login/login'}}" catchtap="stopPropagation">
           <view class="ticket-icon">
             <image src="/pages/static/icon/yh.png" mode="widthFix" style="width: 30px;"></image>
           </view>
@@ -116,6 +116,12 @@
             <image src="/img/sc.png" mode="widthFix" style="width: 30px;"></image>
           </view>
           <text class="function-text">收藏门店</text>
+        </view>
+        <view class="function-item" bindtap="{{isLogin?'goIotDevice':'gotologin'}}">
+          <view class="function-icon device-icon">
+            <van-icon name="setting-o" size="24px" color="#07c160" />
+          </view>
+          <text class="function-text">设备管理</text>
         </view>
       </view>
     </view>

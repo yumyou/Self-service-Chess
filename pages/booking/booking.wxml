@@ -1,25 +1,35 @@
 <!-- pages/doorList/doorList.wxml -->
 <wxs src="../../utils/magic.wxs" module="magic" />
-<view class="logo-top" style="padding-top:{{statusBarHeight+10}}px">
-  <view class="logo-name">
-    <view class="back iconfont icon-back" bind:tap="goBack"></view>
+<view class="logo-top">
+  <view class="logo-name" style="display: flex;align-items: center;flex-direction: row;gap: 10rpx;margin-bottom: 10rpx;">
     <image class="logo" src="/logo.png"></image>
-    <text class="name">{{doorinfodata.storeName}}</text>
+    <text class="name" style="color: #fff !important;">{{doorinfodata.storeName}}</text>
+  </view>
+  <!-- 营业时间 -->
+  <view class="store-card-info" style="display: flex;align-items: center;flex-direction: row;gap: 10rpx;">
+    <view class="info-icon iconfont icon-clock" style="color: #fff !important;"></view>
+    <text class="info-text" style="color: #fff !important;font-size: 24rpx;">营业时间: {{doorinfodata.businessHours || '00:00-24:00'}}</text>
   </view>
 </view>
-<view class="container" style="padding-top:{{statusBarHeight+126}}rpx">
-  <image class="topNotice" mode="widthFix" style="width: 100%;" src="../static/img/notice.png"></image>
-  <view class="top-waring-container">
-      <view class="top-waring">
-      <image class="img" src="../static/icon/caution.png" mode="widthFix"/>
-      <rich-text class="info">
-      下单5分钟内可以取消订单，开始订单前可更换场地。迟到消费，订单按原预定时间开始计费。</rich-text>
+<view class="container" style="padding-top:120rpx">
+  <!-- 日期选择 -->
+  <view class="date-selector">
+      <view class="date-item {{timeselectindex === index ? 'active' : ''}}" wx:for="{{timeDayArr}}" wx:key="index" bindtap="selectDate" data-index="{{index}}">
+        <view class="date-day">{{item}}</view>
+        <view class="date-week">{{timeWeekArr[index]}}</view>
+      </view>
+    <view class="calendar-btn" bindtap="openCalendar">
+      <image class="calendar-icon" src="/pages/static/icon/time.png"></image>
     </view>
   </view>
-  <view class="top-tabs-container" wx:if="{{roomClass&&roomClass.length>1}}">
-    <view class="top-tabs" >
+  <!-- 日历组件：支持单日选择，展示三个月区间 -->
+  <van-calendar show="{{ calendarShow }}" type="single" min-date="{{ calendarMinDate }}" max-date="{{ calendarMaxDate }}" color="#07c160" bind:confirm="onCalendarConfirm" bind:close="onCalendarClose" bind:cancel="onCalendarClose" />
+  <view class="top-tabs-container">
+    <view class="top-tabs">
       <block wx:for="{{roomClass}}" wx:key="roomClass">
-        <view data-index="{{item.value}}" class="tab {{tabIndex === item.value && 'active'}}" bind:tap="tabChange">{{item.text}}</view>
+        <view data-index="{{item.value}}" class="tab {{tabIndex === item.value && 'active'}}" bind:tap="tabChange">
+          {{item.text}}
+        </view>
       </block>
     </view>
   </view>
@@ -29,7 +39,7 @@
       <view class="top">
         <view class="left">
           <block wx:if="{{item.imageUrls.length>0}}">
-            <image class="img" src="{{magic.split(item.imageUrls)[0]}}" catchtap="imgYu" data-index="{{index}}"></image>
+            <image class="img" src="{{magic.split(item.imageUrls)[0]}}" catchtap="imgYu" data-index="{{index}}" binderror="onRoomImageError"></image>
           </block>
           <block wx:else>
             <image class="img" src="/logo.png"></image>
@@ -73,79 +83,78 @@
                 <text class="type">（商务包）</text>
               </block>
             </view>
-            <view class="tags">
+            <!-- <view class="tags">
               <block wx:for="{{magic.split(item.label)}}" wx:for-item="labelitem" wx:key="label">
                 <view class="tag">{{labelitem}}</view>
               </block>
-            </view>
+            </view> -->
           </view>
           <view class="line2">
             <view class="priceLabel">
               <view class="price">
-                每小时
-                <label class="color-attention">￥{{item.price}}元</label>
+                <label class="color-attention">￥{{item.price}}元/小时</label>
               </view>
-              <!-- <block wx:if="{{item.price!=item.workPrice}}">
-                <view class="price">
-                  闲时价
-                  <label class="color-attention">￥{{item.workPrice}}元</label>
-                </view>
-              </block>
-              <block wx:if="{{doorinfodata.showTxPrice}}">
-                <view class="price">
-                  通宵场
-                  <label class="color-attention">￥{{item.tongxiaoPrice}}元</label>
-                </view>
-              </block> -->
+              <view class="original-price">原价￥{{item.originalPrice || 0}}元</view>
             </view>
             <view class="bottom">
-              <block wx:if="{{item.status == 0}}">
-                <!-- 禁用状态 -->
-                <view class="btn disabled">禁用</view>
-              </block>
-              <block wx:else="">
-                <block wx:if="{{isLogin}}">
-                  <view class="btn bg-primary">
-                    预约
-                  </view>
+              <view class="action-btn-2 reserve-btn" catchtap="goOrder" data-status="{{item.status}}" data-index="{{index}}" data-info="{{item.roomId}}">
+                <text style="color: #fff;">预订</text>
+              </view>
+              <view class="status-info">
+                <block wx:if="{{item.status == 0}}">
+                  <text class="status-text disabled">禁用</text>
+                </block>
+                <block wx:elif="{{item.status == 1}}">
+                  <text class="status-text available">空闲中 暂无预订</text>
+                </block>
+                <block wx:elif="{{item.status == 2}}">
+                  <text class="status-text cleaning">待清洁</text>
+                </block>
+                <block wx:elif="{{item.status == 3}}">
+                  <text class="status-text occupied">使用中</text>
                 </block>
                 <block wx:else>
-                  <button hover-class="button-click" class="btn bg-primary" bindgetphonenumber="phone" open-type="getPhoneNumber" data-type="1" data-status="{{item.status}}" data-index="{{index}}" data-info="{{item.roomId}}">
-                    预约
-                  </button>
+                  <text class="status-text booked">已预约</text>
                 </block>
-              </block>
+              </view>
             </view>
           </view>
         </view>
       </view>
       <view class="foot">
-        <view class="foot-top">
-          <view class="labels">
-            <view class="label disabled">不可用</view>
-            <view class="label">可预约</view>
+        <view class="timeline">
+          <view class="timeline-slots">
+            <block wx:for="{{timeHourAllArr[index]}}" wx:for-item="houritem2" wx:key="hour">
+              <view class="time-slot">
+                <view class="slot-marker {{houritem2.disable ? 'disabled' : ''}} {{houritem2.lowPrice ? 'low-price' : ''}} {{houritem2.highPrice ? 'high-price' : ''}}"></view>
+                <text class="slot-time">{{houritem2.displayHour}}</text>
+              </view>
+            </block>
           </view>
-          <block wx:if="{{item.status == 3}}">
-            <view class="tip color-attention" wx:if="{{item.endTime}}">
-              使用中 | {{item.endTime}}结束
+          <view class="timeline-legend">
+            <view class="legend-item">
+              <view class="legend-dot unavailable"></view>
+              <text>不可约</text>
             </view>
-          </block>
-          <!-- <block wx:elif="{{item.status == 4 ||item.status == 2}}">
-            <view class="tip color-attention" wx:if="{{item.endTime}}">
-              已预订 | {{item.startTime}}开始
+            <view class="legend-item">
+              <view class="legend-dot available"></view>
+              <text>可约时段</text>
             </view>
-          </block> -->
-        </view>
-        <view class="times">
-          <block wx:for="{{timeHourAllArr[index]}}" wx:for-item="houritem2">
-            <view class="time {{houritem2.disable?'disabled':''}}">{{houritem2.hour}}</view>
-          </block>
+            <view class="legend-item">
+              <view class="legend-dot low-price"></view>
+              <text>低价时段</text>
+            </view>
+            <view class="legend-item">
+              <view class="legend-dot high-price"></view>
+              <text>高价时段</text>
+            </view>
+          </view>
         </view>
       </view>
     </view>
   </view>
   <!-- 温馨提示 -->
-  <view class="notes">
+  <!-- <view class="notes">
     <view class="title border-primary">温馨提示</view>
     <view class="line">1.下单5分钟内可以取消订单或更换房间，超时将无法取消！</view>
     <view class="line">2.订单可以提前开始消费，提前开始提前结束。</view>
@@ -155,5 +164,5 @@
     <view class="line">6.破坏或带走本场所提供的设备设施请照价赔偿！</view>
     <view class="line">7.请自行保管好私人物品，如有遗失概不负责！</view>
     <view class="line">8.特殊情况，或需要帮助，请联系客服处理！</view>
-  </view>
+  </view> -->
 </view>

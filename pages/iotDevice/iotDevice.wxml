@@ -1,0 +1,285 @@
+<!--pages/iotDevice/iotDevice.wxml-->
+<view class="container">
+  <!-- 自定义导航栏 -->
+
+
+  <!-- 主要内容区域 -->
+  <view class="main-content">
+    <!-- 标签页 -->
+    <van-tabs active="{{ activeTab }}" bind:change="onTabChange" sticky>
+      <van-tab title="设备信息">
+        <!-- 设备控制卡片 -->
+
+        <!-- 设备信息卡片 -->
+        <view class="device-info-card">
+          <view class="card-header">
+            <view class="device-name">{{deviceInfo.name || '设备名称'}}</view>
+            <view class="device-status" style="color: {{getStatusColor(deviceStatus)}}">
+              {{getStatusText(deviceStatus)}}
+            </view>
+          </view>
+          
+          <view class="device-details">
+            <view class="detail-item">
+              <text class="label">设备ID:</text>
+              <text class="value">{{deviceInfo.iotId || '未知'}}</text>
+            </view>
+            <view class="detail-item">
+              <text class="label">产品Key:</text>
+              <text class="value">{{deviceInfo.productKey || '未知'}}</text>
+            </view>
+            <view class="detail-item">
+              <text class="label">创建时间:</text>
+              <text class="value">{{formatTimestamp(deviceInfo.gmtCreate) || '未知'}}</text>
+            </view>
+            <view class="detail-item">
+              <text class="label">最后修改:</text>
+              <text class="value">{{formatTimestamp(deviceInfo.gmtModified) || '未知'}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 设备属性卡片 -->
+        <view class="properties-card">
+          <view class="card-title">设备属性</view>
+          <view class="properties-list">
+            <!-- 根据模板渲染所有属性（优先模板），否则回退到快照 -->
+            <block wx:if="{{templateProperties.length}}">
+              <view class="property-item" wx:for="{{templateProperties}}" wx:key="identifier">
+                <view class="property-header">
+                  <text class="property-name">{{item.name}}（{{item.identifier}}）</text>
+                  <text class="property-time" wx:if="{{deviceInfo.gmtModified}}">{{formatTimestamp(deviceInfo.gmtModified)}}</text>
+                </view>
+                <view class="property-value">
+                  <!-- bool 类型用开关（保存 1/0） -->
+                  <block wx:if="{{item.dataType.type === 'bool'}}">
+                    <van-switch size="24px"
+                                checked="{{propertyValues[item.identifier] == '1' || propertyValues[item.identifier] == 1 || propertyValues[item.identifier] === true}}"
+                                data-identifier="{{item.identifier}}"
+                                bind:change="onChangePropertySwitch" />
+                    <van-button size="mini" type="primary" data-identifier="{{item.identifier}}" bind:click="onSubmitSingleProperty" style="margin-top:8px">下发</van-button>
+                  </block>
+
+                  <!-- enum 类型用选择器（显示中文，保存枚举key） -->
+                  <block wx:elif="{{item.dataType.type === 'enum'}}">
+                    <view class="enum-row" bindtap="openEnumPicker" data-identifier="{{item.identifier}}">
+                      <text>{{propertyValues[item.identifier] !== undefined ? (item.dataType.specs[propertyValues[item.identifier]] || propertyValues[item.identifier]) : '请选择'}}</text>
+                      <van-icon name="arrow" size="16px" />
+                    </view>
+                    <van-button size="mini" type="primary" data-identifier="{{item.identifier}}" bind:click="onSubmitSingleProperty" style="margin-top:8px">下发</van-button>
+                  </block>
+
+                  <!-- 其他类型：text/int/float 用输入框 -->
+                  <block wx:else>
+                    <van-field placeholder="请输入"
+                               value="{{propertyValues[item.identifier]}}"
+                               data-identifier="{{item.identifier}}"
+                               bind:change="onChangePropertyInput" />
+                    <van-button size="mini" type="primary" data-identifier="{{item.identifier}}" bind:click="onSubmitSingleProperty" style="margin-top:8px">下发</van-button>
+                  </block>
+                </view>
+              </view>
+            </block>
+
+            <!-- 回退：仅显示快照（不可编辑） -->
+            <block wx:else>
+              <view class="property-item" wx:for="{{deviceProperties}}" wx:key="attribute">
+                <view class="property-header">
+                  <text class="property-name">{{item.attribute}}</text>
+                  <text class="property-time">{{formatTimestamp(item.gmtModified)}}</text>
+                </view>
+                <view class="property-value">
+                  <text class="value-text">{{item.value}}</text>
+                </view>
+              </view>
+            </block>
+          </view>
+          <view class="form-actions" wx:if="{{templateProperties.length}}">
+            <van-button type="primary" size="small" bind:click="onSubmitAllProperties">批量下发全部可写属性</van-button>
+          </view>
+        </view>
+
+        <!-- 属性设置卡片 -->
+        <view class="property-set-card">
+          <view class="card-title">属性设置</view>
+          <view class="property-form">
+            <van-field
+              label="属性标识符"
+              placeholder="请输入属性标识符"
+              value="{{ propertyIdentifier }}"
+              bind:change="onPropertyIdentifierInput"
+              border="{{ false }}"
+            />
+            <van-field
+              label="属性值"
+              placeholder="请输入属性值"
+              value="{{ propertyValue }}"
+              bind:change="onPropertyValueInput"
+              border="{{ false }}"
+            />
+            <view class="form-actions">
+              <van-button type="primary" size="small" bind:click="onSetProperty">
+                设置属性
+              </van-button>
+            </view>
+          </view>
+        </view>
+      </van-tab>
+
+      <van-tab title="设备列表">
+        <!-- 设备列表 -->
+        <view class="device-list">
+          <view class="list-header">
+            <text class="list-title">设备列表 ({{totalDevices}})</text>
+            <van-button type="primary" size="mini" bind:click="refreshData">
+              刷新
+            </van-button>
+          </view>
+          
+          <view class="device-items">
+            <view class="device-item" wx:for="{{deviceList}}" wx:key="iotId">
+              <view class="device-item-header">
+                <view class="device-item-name">{{item.nickname || item.name}}</view>
+                <view class="device-item-status" style="color: {{getStatusColor(item.status)}}">
+                  {{getStatusText(item.status)}}
+                </view>
+              </view>
+              <view class="device-item-details">
+                <text class="device-id">ID: {{item.iotId}}</text>
+                <text class="device-time" wx:if="{{item.gmtModified}}">{{formatTimestamp(item.gmtModified)}}</text>
+                <text class="device-time" wx:else>状态上次：{{item.statusLast}}</text>
+                <text class="device-time" wx:if="{{item.address}}">地址：{{item.address}}</text>
+                <text class="device-time">余额：{{item.balance || 0}}</text>
+              </view>
+            </view>
+          </view>
+          
+          <!-- 加载更多 -->
+          <view class="load-more" wx:if="{{deviceList.length > 0}}">
+            <van-button 
+              type="default" 
+              size="small" 
+              loading="{{loading}}"
+              bind:click="loadMoreDevices"
+            >
+              {{loading ? '加载中...' : '加载更多'}}
+            </van-button>
+          </view>
+          
+          <!-- 空状态 -->
+          <view class="empty-state" wx:if="{{deviceList.length === 0 && !loading}}">
+            <van-icon name="info-o" size="48px" color="#ccc" />
+            <text class="empty-text">暂无设备数据</text>
+          </view>
+        </view>
+      </van-tab>
+
+      <van-tab title="历史数据">
+        <!-- 历史数据查询 -->
+        <view class="history-query-card">
+          <view class="card-title">历史数据查询</view>
+          <view class="query-form">
+            <van-field
+              label="属性标识符"
+              placeholder="请选择或输入属性标识符"
+              value="{{ propertyIdentifier }}"
+              readonly
+              bind:click="onOpenPropertySelector"
+              border="{{ false }}"
+            />
+            
+            <view class="time-range">
+              <van-field
+                label="开始时间"
+                placeholder="选择开始时间"
+                value="{{ historyStartTime }}"
+                readonly
+                bind:click="onStartTimeChange"
+                border="{{ false }}"
+              />
+              <van-field
+                label="结束时间"
+                placeholder="选择结束时间"
+                value="{{ historyEndTime }}"
+                readonly
+                bind:click="onEndTimeChange"
+                border="{{ false }}"
+              />
+            </view>
+            
+            <view class="form-actions">
+              <van-button type="primary" size="small" bind:click="onQueryHistory">
+                查询历史数据
+              </van-button>
+            </view>
+          </view>
+        </view>
+
+        <!-- 历史数据列表 -->
+        <view class="history-data-card">
+          <view class="card-title">历史数据 ({{historyData.length}})</view>
+          <view class="history-list">
+            <view class="history-item" wx:for="{{historyData}}" wx:key="timestamp">
+              <view class="history-header">
+                <text class="history-property">{{item.property}}</text>
+                <text class="history-time">{{formatTimestamp(item.timestamp)}}</text>
+              </view>
+              <view class="history-value">
+                <text class="value-text">{{item.data}}</text>
+              </view>
+            </view>
+          </view>
+          
+          <!-- 空状态 -->
+          <view class="empty-state" wx:if="{{historyData.length === 0}}">
+            <van-icon name="chart-trending-o" size="48px" color="#ccc" />
+            <text class="empty-text">暂无历史数据</text>
+          </view>
+        </view>
+      </van-tab>
+    </van-tabs>
+  </view>
+
+  <!-- 时间选择器弹窗 -->
+  <van-popup show="{{ showStartTimePicker }}" position="bottom" bind:close="onStartTimePickerClose">
+    <van-datetime-picker
+      type="date"
+      value="{{ historyStartTs }}"
+      min-date="{{ minDate }}"
+      max-date="{{ maxDate }}"
+      bind:confirm="onStartTimeConfirm"
+      bind:cancel="onStartTimePickerClose"
+    />
+  </van-popup>
+
+  <van-popup show="{{ showEndTimePicker }}" position="bottom" bind:close="onEndTimePickerClose">
+    <van-datetime-picker
+      type="date"
+      value="{{ historyEndTs }}"
+      min-date="{{ minDate }}"
+      max-date="{{ maxDate }}"
+      bind:confirm="onEndTimeConfirm"
+      bind:cancel="onEndTimePickerClose"
+    />
+  </van-popup>
+
+  <!-- 枚举选择器弹窗 -->
+  <van-popup show="{{ showEnumPicker }}" position="bottom" bind:close="onEnumCancel">
+    <van-picker
+      columns="{{ enumPickerColumns }}"
+      bind:confirm="onEnumConfirm"
+      bind:cancel="onEnumCancel"
+    />
+  </van-popup>
+
+  <!-- 属性选择器弹窗 -->
+  <van-popup show="{{ showPropertyPicker }}" position="bottom" bind:close="onPropertyCancel">
+    <van-picker
+      columns="{{ propertyPickerColumns }}"
+      bind:confirm="onPropertyConfirm"
+      bind:cancel="onPropertyCancel"
+    />
+  </van-popup>
+</view>
+
+

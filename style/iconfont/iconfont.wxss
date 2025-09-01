@@ -19,6 +19,12 @@
        url('//at.alicdn.com/t/c/font_4537901_7m5hpys3dvs.woff?t=1715157526095') format('woff'),
        url('//at.alicdn.com/t/c/font_4537901_7m5hpys3dvs.ttf?t=1715157526095') format('truetype');
 }
+@font-face {
+  font-family: "iconfont"; /* Project id 4996049 */
+  src: url('//at.alicdn.com/t/c/font_4996049_6h6eh9sl7nn.woff2?t=1754877474787') format('woff2'),
+       url('//at.alicdn.com/t/c/font_4996049_6h6eh9sl7nn.woff?t=1754877474787') format('woff'),
+       url('//at.alicdn.com/t/c/font_4996049_6h6eh9sl7nn.ttf?t=1754877474787') format('truetype');
+}
 
 .iconfont {
   font-family: "iconfont" !important;
@@ -30,6 +36,10 @@
 
 .icon-changeorder:before {
   content: "\e668";
+}
+
+.icon-clock:before {
+  content: "\e627";
 }
 
 .icon-qr-code:before {

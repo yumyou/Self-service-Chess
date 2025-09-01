@@ -7,7 +7,7 @@
     <van-cell-group>
       <van-cell title="所属城市" required is-link>
         <picker mode="region" level="city" bindchange="bindRegionChange" value="{{region}}">
-          <view class="{{region?'picker':''}}">{{region?region:'请选择意向开店城市'}}</view>
+          <view class="{{region?'picker':'noPicker'}}">{{region?region:'请选择意向开店城市'}}</view>
         </picker>
       </van-cell>
     </van-cell-group>

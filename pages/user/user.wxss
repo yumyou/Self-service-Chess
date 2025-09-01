@@ -73,6 +73,12 @@
 		/* 为伪元素定位提供参考 */
 		padding-top:5rpx ;
 		border: none;
+		cursor: pointer;
+		transition: transform 0.2s ease;
+	}
+
+	.blue-jb:active {
+		transform: scale(0.98);
 	}
 
 	/* 左侧三角形 */
@@ -308,6 +314,13 @@
 .favorite-icon {
   background-color: #f5f5f5;
 
+}
+
+.device-icon {
+  background-color: #f0f9ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .function-text {

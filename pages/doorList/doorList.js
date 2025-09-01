@@ -3,6 +3,8 @@
 const app = getApp()
 var http = require('../../utils/http');
 var util1 = require('../../utils/util.js');
+// 使用本地完整省市区数据（复制自 @vant/area-data）
+const {areaList} = require('../../utils/area-full.js');
 
 Page({
   data: {
@@ -22,20 +24,8 @@ Page({
     pageindex:1,//分页的page
     canLoadMore: true,//是否还能加载更多
     userId: '', //管理员代下单用户id
-    areaList : {
-      province_list: {
-        110000: '北京市',
-        120000: '天津市',
-      },
-      city_list: {
-        110100: '北京市',
-        120100: '天津市',
-      },
-      county_list: {
-        110101: '东城区',
-        110102: '西城区',
-      },
-    }
+    // 完整三级行政区数据
+    areaList: areaList
   },
 
   /**
@@ -495,13 +485,21 @@ Page({
     this.setData({ showArea: false });
   },
   onAreaConfirm(e) {
-    const { values } = e.detail;
-    const cityName = values.map(item => item.name).join('');
+    const { values } = e.detail || {};
+    const selected = Array.isArray(values) ? values.filter(Boolean) : [];
+    const cityName = selected.length > 0 ? selected.map(item => item.name).join('') : '选择城市';
+    const lastCode = selected.length > 0 ? selected[selected.length - 1].code : '';
     this.setData({
       cityName,
       showArea: false,
-      areaValue: values[2]?.code || values[1]?.code || values[0]?.code
+      areaValue: lastCode
     });
     this.getMainListdata('refresh');
+  },
+  onImageError(e) {
+    const index = e.currentTarget.dataset.index;
+    if (typeof index !== 'number') return;
+    const key = `MainStorelist[${index}].headImg`;
+    this.setData({ [key]: '' });
   },
 })
